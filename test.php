@@ -1,28 +1,36 @@
 <?php
 require_once 'vendor/autoload.php';
 
-$test = new \AppBundle\Objects\Student();
-
 use \AppBundle\Scope;
 use \AppBundle\Base\DAO\IStudentDAO;
 use \AppBundle\Base\DAO\ICourseDAO;
-use \AppBundle\Objects\Course;
-use \AppBundle\Objects\Admin;
 use \AppBundle\Base\DAO\IAdminDAO;
 
-/** @var IStudentDAO $StudentDAO */
-//$studentDAO = Scope::skeleton()->get(IStudentDAO::class);
+use \AppBundle\Objects\Course;
+use \AppBundle\Objects\Student;
+use \AppBundle\Objects\Admin;
 
-//works
-/*$student = $studentDAO->load(1);
-$student->s_email = 'Moshik@gmail.com';
-$studentDAO->save($student);*/
+/** @var IStudentDAO $StudentDAO */
+$studentDAO = Scope::skeleton()->get(IStudentDAO::class);
+/** @var ICourseDAO $CourseDAO */
+$courseDAO = Scope::skeleton()->get(ICourseDAO::class);
+/** @var IAdminDAO $AdminDAO */
+$adminDAO = Scope::skeleton()->get(IAdminDAO::class);
+
+//work
+/*$newStudent = new Student();
+$newStudent->fromArray([
+    's_name'      => 'Haruz',
+    's_email'     => 'haruz@gmail.com',
+    's_phone'     => '0528864232',
+    's_img'       => 2
+]);
+$studentDAO->save($newStudent);*/
 
 //var_dump(Scope::skeleton()->get(ICourseDAO::class)); // works
 
 //works
-/*$courseDAO = Scope::skeleton()->get(ICourseDAO::class);
-$data = [
+/*$data = [
     'c_name'        => 'Course_A',
     'c_description' => 'some description',
     'c_img'         => 0];
@@ -31,22 +39,22 @@ $newCourse->fromArray($data);
 
 $courseDAO->save($newCourse);*/
 
-
-
-/**
- * @var IAdminDAO $AdminDAO
- */
-$adminDAO = Scope::skeleton()->get(IAdminDAO::class);
-
-$admin = new Admin();
-$admin->fromArray([
-    '$a_name'      => 'Evgeniy',
-    '$a_email'     => 'evgen@gmail.com',
-    '$a_phone'     => '0528864255',
-    '$a_password'  => '123',
-    '$a_role'      => 1
+//works
+/*$newadmin = new Admin();
+$newadmin->fromArray([
+    'a_name'      => 'Evgeniy',
+    'a_email'     => 'evgen@gmail.com',
+    'a_phone'     => '0528864255',
+    'a_password'  => '123',
+    'a_role'      => 1
 ]);
-var_dump($admin);
+$adminDAO->save($newadmin);*/
 
-$adminDAO->save($admin);
+
+/*$select = Scope::connector()->select();
+$select->from('students')->where('s_ID=?', 3);
+$result = $select->queryRow();
+var_dump($result);*/
+
+
 

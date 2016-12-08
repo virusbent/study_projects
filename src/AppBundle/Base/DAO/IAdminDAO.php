@@ -9,23 +9,32 @@
 namespace AppBundle\Base\DAO;
 use AppBundle\Objects\Admin;
 
-
 /**
- * Interface IAdminDAO
- * @package AppBundle\Base\DAO
+ * @skeleton
  */
 interface IAdminDAO
 {
     /**
-     * @param $id
+     * @param int $id
      *
      * @return Admin|null
      */
     public function load($id);
 
     /**
-     * @param $admin
-     *
+     * @param Admin $admin
      */
     public function save(Admin $admin);
+
+    /**
+     * @param int $id
+     */
+    public function delete($id);
+
+    /**
+     * @param int $id
+     *
+     * @return string|null
+     */
+    public function getRole($id);
 }

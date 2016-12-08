@@ -28,13 +28,13 @@ class AdminDAO implements IAdminDAO
         $this->connector = new MySqlAutoIncrementConnector();
         $this->connector
                 ->setConnector(Scope::connector())
-                ->setDomain(Admin::class)
                 ->setTable(self::TABLE)
+                ->setDomain(Admin::class)
                 ->setIdField('a_ID');
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return Admin|null
      */
@@ -50,5 +50,18 @@ class AdminDAO implements IAdminDAO
     public function save(Admin $admin)
     {
         $this->connector->save($admin);
+    }
+
+    /**
+     * @param int $id
+     */
+    public function delete($id)
+    {
+        $this->connector->delete($id);
+    }
+
+    public function getRole($id)
+    {
+        // TODO: Implement getRole() method.
     }
 }

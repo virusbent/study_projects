@@ -8,7 +8,6 @@
 
 namespace AppBundle\Objects;
 
-
 use Objection\LiteObject;
 use Objection\LiteSetup;
 

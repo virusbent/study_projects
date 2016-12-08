@@ -13,8 +13,6 @@ use Objection\LiteObject;
 use Objection\LiteSetup;
 
 /**
- * Class Admin
- *
  * @property int    $a_ID
  * @property string $a_name
  * @property string $a_email
@@ -31,12 +29,12 @@ class Admin extends LiteObject
     protected function _setup()
     {
         return[
-            '$a_ID'        => LiteSetup::createInt(null),
-            '$a_name'      => LiteSetup::createString(),
-            '$a_email'     => LiteSetup::createString(),
-            '$a_phone'     => LiteSetup::createString(),
-            '$a_password'  => LiteSetup::createString(),
-            '$a_role'      => LiteSetup::createInt(null)
+            'a_ID'        => LiteSetup::createInt(null),
+            'a_name'      => LiteSetup::createString(),
+            'a_email'     => LiteSetup::createString(),
+            'a_phone'     => LiteSetup::createString(),
+            'a_password'  => LiteSetup::createString(),
+            'a_role'      => LiteSetup::createInt(null)
         ];
     }
 }

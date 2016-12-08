@@ -47,4 +47,12 @@ class StudentDAO implements IStudentDAO
     {
         $this->connector->save($student);
     }
+
+    /**
+     * @param int $id
+     */
+    public function delete($id)
+    {
+        $this->connector->delete($id);
+    }
 }

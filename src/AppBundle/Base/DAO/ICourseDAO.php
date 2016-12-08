@@ -18,7 +18,7 @@ use AppBundle\Objects\Course;
 interface ICourseDAO
 {
     /**
-     * @param $id
+     * @param int $id
      *
      * @return Course|null
      */
@@ -28,4 +28,9 @@ interface ICourseDAO
      * @param Course $course
      */
     public function save(Course $course);
+
+    /**
+     * @param int $id
+     */
+    public function delete($id);
 }

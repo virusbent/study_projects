@@ -34,7 +34,7 @@ class CourseDao implements ICourseDAO
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return Course|null
      */
@@ -49,5 +49,13 @@ class CourseDao implements ICourseDAO
     public function save(Course $course)
     {
         $this->connector->save($course);
+    }
+
+    /**
+     * @param int $id
+     */
+    public function delete($id)
+    {
+        $this->connector->delete($id);
     }
 }

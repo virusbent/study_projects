@@ -7,8 +7,6 @@
  */
 
 namespace AppBundle\Base\DAO;
-
-
 use AppBundle\Objects\Student;
 
 /**
@@ -26,4 +24,9 @@ interface IStudentDAO
      * @param Student $student
      */
     public function save(Student $student);
+
+    /**
+     * @param int $id
+     */
+    public function delete($id);
 }
