@@ -5,6 +5,7 @@ use \AppBundle\Scope;
 use \AppBundle\Base\DAO\IStudentDAO;
 use \AppBundle\Base\DAO\ICourseDAO;
 use \AppBundle\Base\DAO\IAdminDAO;
+use \AppBundle\DAO\Courses_StudentsDAO;
 
 use \AppBundle\Objects\Course;
 use \AppBundle\Objects\Student;
@@ -56,5 +57,12 @@ $select->from('students')->where('s_ID=?', 3);
 $result = $select->queryRow();
 var_dump($result);*/
 
-
-
+// works
+$allStudentsOfJava = new Courses_StudentsDAO();
+$result = $allStudentsOfJava->getAllStudentsOfCourse(3);
+var_dump($result);
+foreach ($result as $javaStudentID)
+{
+    $javaStudent = $studentDAO->load($javaStudentID);
+    var_dump($javaStudent);
+}

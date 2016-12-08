@@ -41,8 +41,9 @@ class Courses_StudentsDAO implements ICourses_StudentsDAO
     {
         $select = $this->connector->select();
         $select->column('cs_student_ID')
-                ->from(Table::class)
-                ->where('cs_course_ID=', $id);
-        return $select->queryAll();
+                ->from(self::TABLE)
+                ->byField('cs_course_ID', $id);
+        $result = $select->queryColumn();
+        return $result;
     }
 }
