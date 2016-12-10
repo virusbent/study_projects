@@ -29,4 +29,14 @@ interface IStudentDAO
      * @param int $id
      */
     public function delete($id);
+
+    /**
+     * @param Student $modifiedStudent
+     */
+    public function update(Student $modifiedStudent);
+
+    /**
+     * @return int
+     */
+    public function countAll();
 }

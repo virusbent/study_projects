@@ -9,7 +9,7 @@
 namespace AppBundle\DAO;
 use AppBundle\Base\DAO\ICourses_StudentsDAO;
 use AppBundle\Scope;
-use Doctrine\DBAL\Schema\Table;
+//use Doctrine\DBAL\Schema\Table; // <- delete this
 
 class Courses_StudentsDAO implements ICourses_StudentsDAO
 {
@@ -29,7 +29,12 @@ class Courses_StudentsDAO implements ICourses_StudentsDAO
      */
     public function getAllCoursesOfStudent($id)
     {
-        // TODO: Implement getAllCoursesOfStudent() method.
+        $select = $this->connector->select();
+        $select->column('cs_course_ID')
+            ->from(self::TABLE)
+            ->byField('cs_student_ID', $id);
+        $result = $select->queryColumn();
+        return $result;
     }
 
     /**

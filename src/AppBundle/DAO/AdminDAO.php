@@ -8,7 +8,6 @@
 
 namespace AppBundle\DAO;
 
-
 use AppBundle\Base\DAO\IAdminDAO;
 use AppBundle\Objects\Admin;
 use AppBundle\Scope;

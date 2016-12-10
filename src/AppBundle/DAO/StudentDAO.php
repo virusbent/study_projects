@@ -8,7 +8,6 @@
 
 namespace AppBundle\DAO;
 
-
 use AppBundle\Base\DAO\IStudentDAO;
 use AppBundle\Objects\Student;
 use AppBundle\Scope;
@@ -21,8 +20,11 @@ class StudentDAO implements IStudentDAO
     /** @var  MySqlAutoIncrementConnector */
     private $connector;
 
+    private $mysql;
+
     public function __construct()
     {
+        $this->mysql     = Scope::connector();
         $this->connector = new MySqlAutoIncrementConnector();
         $this->connector
              ->setConnector(Scope::connector())
@@ -54,5 +56,25 @@ class StudentDAO implements IStudentDAO
     public function delete($id)
     {
         $this->connector->delete($id);
+    }
+
+    /**
+     * @return int
+     */
+    public function countAll()
+    {
+        $select = $this->mysql->select();
+        $select->column('s_ID')
+                ->from(self::TABLE);
+        $result = $select->queryCount();
+        return $result;
+    }
+
+    /**
+     * @param Student $modifiedStudent
+     */
+    public function update(Student $modifiedStudent)
+    {
+        $this->connector->update($modifiedStudent);
     }
 }

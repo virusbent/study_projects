@@ -6,19 +6,20 @@ use \AppBundle\Base\DAO\IStudentDAO;
 use \AppBundle\Base\DAO\ICourseDAO;
 use \AppBundle\Base\DAO\IAdminDAO;
 use \AppBundle\DAO\Courses_StudentsDAO;
+use \AppBundle\Base\DAO\IStudentService;
 
 use \AppBundle\Objects\Course;
 use \AppBundle\Objects\Student;
 use \AppBundle\Objects\Admin;
 
 /** @var IStudentDAO $StudentDAO */
-$studentDAO = Scope::skeleton()->get(IStudentDAO::class);
+//$studentDAO = Scope::skeleton()->get(IStudentDAO::class);
 /** @var ICourseDAO $CourseDAO */
 $courseDAO = Scope::skeleton()->get(ICourseDAO::class);
 /** @var IAdminDAO $AdminDAO */
 $adminDAO = Scope::skeleton()->get(IAdminDAO::class);
 
-//work
+//works - saving Student to DB (generated)from array.
 /*$newStudent = new Student();
 $newStudent->fromArray([
     's_name'      => 'Haruz',
@@ -27,8 +28,6 @@ $newStudent->fromArray([
     's_img'       => 2
 ]);
 $studentDAO->save($newStudent);*/
-
-//var_dump(Scope::skeleton()->get(ICourseDAO::class)); // works
 
 //works
 /*$data = [
@@ -40,7 +39,7 @@ $newCourse->fromArray($data);
 
 $courseDAO->save($newCourse);*/
 
-//works
+//works - saving Admin to DB (generated)from array.
 /*$newadmin = new Admin();
 $newadmin->fromArray([
     'a_name'      => 'Evgeniy',
@@ -57,12 +56,30 @@ $select->from('students')->where('s_ID=?', 3);
 $result = $select->queryRow();
 var_dump($result);*/
 
-// works
-$allStudentsOfJava = new Courses_StudentsDAO();
+// works - pull all the Students that registered in course: Java.
+/*$allStudentsOfJava = new Courses_StudentsDAO();
 $result = $allStudentsOfJava->getAllStudentsOfCourse(3);
 var_dump($result);
 foreach ($result as $javaStudentID)
 {
     $javaStudent = $studentDAO->load($javaStudentID);
     var_dump($javaStudent);
-}
+}*/
+
+// works - pull all Courses that some Student is registered to.
+/*$allCoursesOfStudent = new Courses_StudentsDAO();
+$result = $allCoursesOfStudent->getAllCoursesOfStudent(3);
+var_dump($result);
+foreach ($result as $courseID)
+{
+    $course = $courseDAO->load($courseID);
+    var_dump($course);
+}*/
+
+$service = Scope::skeleton()->get(IStudentService::class);
+$count   = $service->getNumberOfStudents();
+var_dump($count);
+
+// TODO: try to execute the ImagesDAO and test its function
+
+
