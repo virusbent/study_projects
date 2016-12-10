@@ -78,6 +78,8 @@ foreach ($result as $courseID)
 
 $service = Scope::skeleton()->get(IStudentService::class);
 $count   = $service->getNumberOfStudents();
+$student = $service->getStudentByID(3);
+var_dump($student);
 var_dump($count);
 
 // TODO: try to execute the ImagesDAO and test its function

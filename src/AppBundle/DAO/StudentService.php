@@ -21,12 +21,12 @@ class StudentService implements IStudentService
 {
     /**
      * @autoload
-     * @var     IStudentDAO \AppBundle\Base\DAO\IStudentDAO
+     * @var \AppBundle\Base\DAO\IStudentDAO
      */
     private $studentDAO;
 
     /**@autoload
-     * @var     ICourses_StudentsDAO \AppBundle\Base\DAO\ICourses_StudentsDAO
+     * @var \AppBundle\Base\DAO\ICourses_StudentsDAO
      */
     private $coursesOfStudentDAO;
 
