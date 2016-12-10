@@ -9,7 +9,8 @@ use AppBundle\DAO\CourseDAO;
 use AppBundle\DAO\StudentDAO;
 use AppBundle\DAO\Courses_StudentsDAO;
 use AppBundle\DAO\ImageDAO;
-use AppBundle\DAO\StudentService; //TODO: move this file from DAO to Services.
+use AppBundle\Services\StudentService;
+
 
 $this->set(IStudentDAO::class,             StudentDAO::class);
 $this->set(ICourseDAO::class,              CourseDao::class);

@@ -7,6 +7,7 @@ use \AppBundle\Base\DAO\ICourseDAO;
 use \AppBundle\Base\DAO\IAdminDAO;
 use \AppBundle\DAO\Courses_StudentsDAO;
 use \AppBundle\Base\DAO\IStudentService;
+use AppBundle\Base\DAO\IImageDAO;
 
 use \AppBundle\Objects\Course;
 use \AppBundle\Objects\Student;
@@ -18,6 +19,8 @@ use \AppBundle\Objects\Admin;
 $courseDAO = Scope::skeleton()->get(ICourseDAO::class);
 /** @var IAdminDAO $AdminDAO */
 $adminDAO = Scope::skeleton()->get(IAdminDAO::class);
+
+$imgDAO = Scope::skeleton()->get(IImageDAO::class);
 
 //works - saving Student to DB (generated)from array.
 /*$newStudent = new Student();
@@ -80,8 +83,6 @@ $service = Scope::skeleton()->get(IStudentService::class);
 $count   = $service->getNumberOfStudents();
 $student = $service->getStudentByID(3);
 var_dump($student);
-var_dump($count);
-
-// TODO: try to execute the ImagesDAO and test its function
 
 
+//TODO: write Services to Courses, Images and Admins.

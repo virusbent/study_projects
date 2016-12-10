@@ -6,7 +6,7 @@
  * Time: 18:37
  */
 
-namespace AppBundle\DAO;
+namespace AppBundle\Services;
 
 use AppBundle\Base\DAO\ICourses_StudentsDAO;
 use AppBundle\Base\DAO\IStudentDAO;
@@ -25,7 +25,8 @@ class StudentService implements IStudentService
      */
     private $studentDAO;
 
-    /**@autoload
+    /**
+     * @autoload
      * @var \AppBundle\Base\DAO\ICourses_StudentsDAO
      */
     private $coursesOfStudentDAO;
@@ -49,7 +50,7 @@ class StudentService implements IStudentService
     }
 
     /**
-     * Returns an array of Courses that THE Student is registered to.
+     * Returns an array of Course_id's that THE Student is registered to.
      * @param   int $id
      * @return  array|null
      */
