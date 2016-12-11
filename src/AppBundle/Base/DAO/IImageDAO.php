@@ -13,12 +13,12 @@ interface IImageDAO
 {
     /**
      * @param int $id
-     * @return array|null
+     * @return string|null
      */
     public function load($id);
 
     /**
-     * @param int $imgPath
+     * @param string $imgPath
      */
     public function save($imgPath);
 
@@ -26,4 +26,10 @@ interface IImageDAO
      * @param int $id
      */
     public function delete($id);
+
+    /**
+     * @param string|int $id
+     * @param string $path
+     */
+    public function update($id, $path);
 }

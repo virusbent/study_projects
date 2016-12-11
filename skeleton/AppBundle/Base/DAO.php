@@ -9,6 +9,7 @@ use AppBundle\DAO\CourseDAO;
 use AppBundle\DAO\StudentDAO;
 use AppBundle\DAO\Courses_StudentsDAO;
 use AppBundle\DAO\ImageDAO;
+use AppBundle\Services\ImageService;
 use AppBundle\Services\StudentService;
 
 
@@ -17,4 +18,5 @@ $this->set(ICourseDAO::class,              CourseDao::class);
 $this->set(IAdminDAO::class,               AdminDAO::class);
 $this->set(ICourses_StudentsDAO::class,    Courses_StudentsDAO::class);
 $this->set(IImageDAO::class,               ImageDAO::class);
+$this->set(IImageService::class,           ImageService::class);
 $this->set(IStudentService::class,         StudentService::class);

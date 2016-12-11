@@ -16,6 +16,7 @@ class ImageDAO implements IImageDAO
     const TABLE = 'images';
 
     private $connector;
+    private $img_id;
 
     public function __construct()
     {
@@ -24,7 +25,7 @@ class ImageDAO implements IImageDAO
 
     /**
      * @param int $id
-     * @return array|null
+     * @return string|null
      */
     public function load($id)
     {
@@ -32,16 +33,18 @@ class ImageDAO implements IImageDAO
         $select->column()
             ->from(self::TABLE)
             ->byField('i_ID', $id);
-        $result = $select->query();
+        $result = $select->queryRow();
         return $result;
     }
 
     /**
-     * @param int $imgPath
+     * @param string $imgPath
      */
     public function save($imgPath)
     {
-        // TODO: Implement save() method.
+        $save = $this->connector->insert();
+        $save->into(self::TABLE, ['i_path'])
+                ->values($imgPath)->execute();
     }
 
     /**
@@ -49,5 +52,23 @@ class ImageDAO implements IImageDAO
      */
     public function delete($id)
     {
-        // TODO: Implement delete() method.
-    }}
+        $delete = $this->connector->delete();
+        $delete->from(self::TABLE)
+                ->byField('i_ID', $id)
+                ->execute();
+    }
+
+    /**
+     * @param int|string $id
+     * @param string     $path
+     */
+    public function update($id, $path)
+    {
+        // TODO: Implement update() method.
+        $update = $this->connector->update();
+        $update->table(self::TABLE)
+                ->byField('i_ID', $id)
+                ->set('i_path', $path)
+                ->execute();
+    }
+}

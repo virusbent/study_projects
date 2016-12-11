@@ -7,7 +7,8 @@ use \AppBundle\Base\DAO\ICourseDAO;
 use \AppBundle\Base\DAO\IAdminDAO;
 use \AppBundle\DAO\Courses_StudentsDAO;
 use \AppBundle\Base\DAO\IStudentService;
-use AppBundle\Base\DAO\IImageDAO;
+use \AppBundle\Base\DAO\IImageDAO;
+use \AppBundle\Base\DAO\IImageService;
 
 use \AppBundle\Objects\Course;
 use \AppBundle\Objects\Student;
@@ -84,5 +85,11 @@ $count   = $service->getNumberOfStudents();
 $student = $service->getStudentByID(3);
 var_dump($student);
 
+$imgService = Scope::skeleton()->get(IImageService::class);
+$img = $imgService->getImageByID(5);
 
-//TODO: write Services to Courses, Images and Admins.
+$newImg = 'student_profile3.jpeg';
+$imgService->saveImage($newImg);
+
+
+//TODO: write Services to Courses and Admins.
