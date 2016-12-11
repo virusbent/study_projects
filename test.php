@@ -6,9 +6,12 @@ use \AppBundle\Base\DAO\IStudentDAO;
 use \AppBundle\Base\DAO\ICourseDAO;
 use \AppBundle\Base\DAO\IAdminDAO;
 use \AppBundle\DAO\Courses_StudentsDAO;
-use \AppBundle\Base\DAO\IStudentService;
+use AppBundle\Base\DAO\IAdminRoleDAO;
 use \AppBundle\Base\DAO\IImageDAO;
+
+use \AppBundle\Base\DAO\IStudentService;
 use \AppBundle\Base\DAO\IImageService;
+use \AppBundle\Base\DAO\IAdminService;
 
 use \AppBundle\Objects\Course;
 use \AppBundle\Objects\Student;
@@ -86,10 +89,15 @@ $student = $service->getStudentByID(3);
 var_dump($student);
 
 $imgService = Scope::skeleton()->get(IImageService::class);
-$img = $imgService->getImageByID(5);
+$img        = $imgService->getImageByID(5);
 
 $newImg = 'student_profile3.jpeg';
 $imgService->saveImage($newImg);
 
+$adminService   = Scope::skeleton()->get(IAdminService::class);
+$adminRole      = $adminService->getAdminRole(3);
+var_dump($adminRole);
 
-//TODO: write Services to Courses and Admins.
+
+
+//TODO: write Services to Courses.

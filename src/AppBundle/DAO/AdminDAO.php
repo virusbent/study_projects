@@ -51,6 +51,7 @@ class AdminDAO implements IAdminDAO
         $this->connector->save($admin);
     }
 
+
     /**
      * @param int $id
      */
@@ -62,5 +63,13 @@ class AdminDAO implements IAdminDAO
     public function getRole($id)
     {
         // TODO: Implement getRole() method.
+    }
+
+    /**
+     * @param Admin $admin
+     */
+    public function update(Admin $admin)
+    {
+        $this->connector->update($admin);
     }
 }

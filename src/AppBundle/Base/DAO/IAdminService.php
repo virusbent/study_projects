@@ -2,24 +2,28 @@
 /**
  * Created by PhpStorm.
  * User: evgeniy
- * Date: 06/12/16
- * Time: 20:41
+ * Date: 11/12/16
+ * Time: 22:17
  */
 
 namespace AppBundle\Base\DAO;
+
+
 use AppBundle\Objects\Admin;
 
-/**
- * @skeleton
- */
-interface IAdminDAO
+interface IAdminService
 {
     /**
      * @param int $id
-     *
      * @return Admin|null
      */
-    public function load($id);
+    public function getAdminByID($id);
+
+    /**
+     * @param int $id
+     * @return string|null
+     */
+    public function getAdminRole($id);
 
     /**
      * @param Admin $admin
@@ -35,11 +39,4 @@ interface IAdminDAO
      * @param int $id
      */
     public function delete($id);
-
-    /**
-     * @param int $id
-     *
-     * @return string|null
-     */
-    public function getRole($id);
 }
