@@ -2,27 +2,28 @@
 /**
  * Created by PhpStorm.
  * User: evgeniy
- * Date: 06/12/16
- * Time: 14:56
+ * Date: 13/12/16
+ * Time: 21:57
  */
 
 namespace AppBundle\Base\DAO;
 
+
 use AppBundle\Objects\Course;
 
-/**
- * Interface ICourseDAO
- * @package AppBundle\Base\DAO
- * @skeleton
- */
-interface ICourseDAO
+interface ICourseService
 {
     /**
      * @param int $id
-     *
      * @return Course|null
      */
-    public function load($id);
+    public function getCourseByID($id);
+
+    /**
+     * @param int $id
+     * @return array|null
+     */
+    public function getCourseStudents($id);
 
     /**
      * @param Course $course

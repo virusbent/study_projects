@@ -58,4 +58,12 @@ class CourseDao implements ICourseDAO
     {
         $this->connector->delete($id);
     }
+
+    /**
+     * @param Course $course
+     */
+    public function update(Course $course)
+    {
+        $this->connector->update($course);
+    }
 }
