@@ -1,0 +1,22 @@
+{
+  "name": "courses_manip_project",
+  "homepage": "https://github.com/virusbent/study_projects",
+  "authors": [
+    "Evgeniy <virusbent@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "bootstrap": "^3.3.7"
+  }
+}

@@ -1,0 +1,22 @@
+.target-header{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+.target-title{
+    display: flex;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.btn-left{
+    display: flex;
+    align-self: flex-start;
+}
+.btn-right{
+    display: flex;
+    align-self: flex-end;
+
+}
