@@ -1,12 +1,21 @@
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-12" id="buttons">
-                <div class="col-lg-6 btn-left" id="save-btn">
-                    <button class="btn btn-primary btn-block" type="submit">Save</button>
+                <div class="col-lg-6 btn-left">
+                    <button class="btn btn-success" id="save-btn" type="submit">
+                        <i class="fa fa-floppy-o fa-2x" aria-hidden="true"></i>
+                    </button>
                 </div>
-                <div class="col-lg-6 btn-right" id="edit-btn">
-                    <button class="btn btn-primary btn-block" type="submit">Delete</button>
+                <div class="col-lg-6 btn-right">
+                    <button class="btn btn-danger" id="delete-btn" type="submit">
+                        <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn" id="close-btn" type="submit">
+                        <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
             <form class="form-signin">
@@ -22,8 +31,10 @@
                 <div>
                     <img src="http://placehold.it/250x250" alt="placeholdit">
                 </div>
-                <div id="list-of-courses">
-                    <ul></ul>
+                <div id="student-courses">
+                    <ul class="list-group" id="list-of-courses">
+                        <li class="list-group-item" id="course-item"></li>
+                    </ul>
                 </div>
             </form>
         </div>
