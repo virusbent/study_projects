@@ -82,4 +82,12 @@ class StudentService implements IStudentService
     {
         $this->studentDAO->update($student);
     }
+
+    /**
+     * @return array|null
+     */
+    public function getAllStudents()
+    {
+        return $this->studentDAO->loadAll();
+    }
 }

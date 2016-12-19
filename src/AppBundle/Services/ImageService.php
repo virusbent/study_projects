@@ -24,6 +24,7 @@ class ImageService implements IImageService
 
     private $img_id;
     private $img_path;
+    private $img_thumb;
 
     /**
      * @param int $id
@@ -36,20 +37,23 @@ class ImageService implements IImageService
 
     /**
      * @param string $imgPath
+     * @param string $thumbPath
      */
-    public function saveImage($imgPath)
+    public function saveImage($imgPath, $thumbPath)
     {
-        $this->imgDAO->save($imgPath);
+        $this->imgDAO->save($imgPath, $thumbPath);
     }
 
     /**
-     * @param array $imgPath
+     * The array contains id, path and thumbnail path (in this order)
+     * @param array $img
      */
-    public function updateImage($imgPath)
+    public function updateImage($img)
     {
-        $this->img_id   = $imgPath[0];
-        $this->img_path = $imgPath[1];
-        $this->imgDAO->update($this->img_id, $this->img_path);
+        $this->img_id       = $img[0];
+        $this->img_path     = $img[1];
+        $this->img_thumb    = $img[2];
+        $this->imgDAO->update($this->img_id, $this->img_path, $this->img_thumb);
     }
 
     /**

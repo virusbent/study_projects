@@ -40,11 +40,11 @@ class ImageDAO implements IImageDAO
     /**
      * @param string $imgPath
      */
-    public function save($imgPath)
+    public function save($imgPath, $thumbPath)
     {
         $save = $this->connector->insert();
-        $save->into(self::TABLE, ['i_path'])
-                ->values($imgPath)->execute();
+        $save->into(self::TABLE, ['i_path', 'i_thumb'])
+                ->values($imgPath, $thumbPath)->execute();
     }
 
     /**
@@ -62,13 +62,14 @@ class ImageDAO implements IImageDAO
      * @param int|string $id
      * @param string     $path
      */
-    public function update($id, $path)
+    public function update($id, $path, $thumbPath)
     {
         // TODO: Implement update() method.
         $update = $this->connector->update();
         $update->table(self::TABLE)
                 ->byField('i_ID', $id)
                 ->set('i_path', $path)
+                ->set('i_thumb', $thumbPath)
                 ->execute();
     }
 }

@@ -13,9 +13,7 @@ class MainController extends Controller
      */
     public function mainAction(Request $request)
     {
-        return $this->render('school/school.html.twig', array(
-            'showMe' => ''
-        ));
+        return $this->render('school/school.html.twig');
     }
 
 

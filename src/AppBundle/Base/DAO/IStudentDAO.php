@@ -21,6 +21,11 @@ interface IStudentDAO
     public function load($id);
 
     /**
+     * @return array|null
+     */
+    public function loadAll();
+
+    /**
      * @param Student $student
      */
     public function save(Student $student);

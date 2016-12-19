@@ -19,6 +19,11 @@ interface IStudentService
     public function getNumberOfStudents();
 
     /**
+     * @return array|null
+     */
+    public function getAllStudents();
+
+    /**
      * @param   int          $id
      * @return  Student|null
      */

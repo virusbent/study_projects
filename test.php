@@ -83,19 +83,39 @@ foreach ($result as $courseID)
     var_dump($course);
 }*/
 
-$service = Scope::skeleton()->get(IStudentService::class);
+/*$service = Scope::skeleton()->get(IStudentService::class);
 $count   = $service->getNumberOfStudents();
 $student = $service->getStudentByID(3);
-var_dump($student);
+var_dump($student);*/
 
-$imgService = Scope::skeleton()->get(IImageService::class);
+// TODO: check if image services are working
+/*$imgService = Scope::skeleton()->get(IImageService::class);
 $img        = $imgService->getImageByID(5);
 
 $newImg = 'student_profile3.jpeg';
-$imgService->saveImage($newImg);
+$imgService->saveImage($newImg);*/
 
-$adminService   = Scope::skeleton()->get(IAdminService::class);
+/*$adminService   = Scope::skeleton()->get(IAdminService::class);
 $adminRole      = $adminService->getAdminRole(3);
-var_dump($adminRole);
+var_dump($adminRole);*/
+
+$imgService      = Scope::skeleton()->get(IImageService::class);
+$studentsService = Scope::skeleton()->get(IStudentService::class);
+$qResult         = $studentsService->getAllStudents();
+$objects         = Student::allFromArray($qResult);
+//var_dump($objects[0]->s_img);
+
+
+// get thumbnail of each student
+foreach ($objects as $student){
+    //var_dump($student->s_img);
+    $imgs = $imgService->getImageByID($student->s_img)[2];
+    var_dump($imgs);
+};
+
+
+//$objects = Student::allFromArray($qResult);
+
+//var_dump(json_encode($qResult));
 
 

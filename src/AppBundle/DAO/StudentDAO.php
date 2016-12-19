@@ -77,4 +77,13 @@ class StudentDAO implements IStudentDAO
     {
         $this->connector->update($modifiedStudent);
     }
+
+    /**
+     * @return array|null
+     */
+    public function loadAll()
+    {
+        $select = $this->mysql->select();
+        return $select->from(self::TABLE)->queryAll(true);
+    }
 }

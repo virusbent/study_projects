@@ -19,13 +19,15 @@ interface IImageService
 
     /**
      * @param string $imgPath
+     * @param string $thumbPath
      */
-    public function saveImage($imgPath);
+    public function saveImage($imgPath, $thumbPath);
 
     /**
-     * @param string $imgPath
+     * The array contains id, path and thumbnail path (in this order)
+     * @param array $img
      */
-    public function updateImage($imgPath);
+    public function updateImage($img);
 
     /**
      * @param int $id

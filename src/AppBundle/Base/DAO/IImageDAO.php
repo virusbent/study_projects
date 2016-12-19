@@ -19,8 +19,9 @@ interface IImageDAO
 
     /**
      * @param string $imgPath
+     * @param string $thumbPath
      */
-    public function save($imgPath);
+    public function save($imgPath, $thumbPath);
 
     /**
      * @param int $id
@@ -30,6 +31,7 @@ interface IImageDAO
     /**
      * @param string|int $id
      * @param string $path
+     * @param string $thumbPath
      */
-    public function update($id, $path);
+    public function update($id, $path, $thumbPath);
 }
