@@ -7,6 +7,7 @@ use AppBundle\Scope;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,16 +21,12 @@ class ImagesController extends Controller
      */
     public function getStudentImgs($studentImgId)
     {
-        var_dump($studentImgId);
-
         $imgService      = Scope::skeleton()->get(IImageService::class);
 
         $imgs            = $imgService->getImageByID($studentImgId);
+        $imgsJson        = json_encode($imgs);
 
-        $response        = json_encode($imgs);
-        var_dump($response);
-
-        return new Response($response);
+        return new JsonResponse($imgs);
     }
 
 

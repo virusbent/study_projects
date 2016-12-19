@@ -3,12 +3,7 @@
  */
 $(document).ready(function () {
 
-    var showMe = '';
-
-    // flag that will allow posting things AFTER im sure
-    // that I have received data from the DB.
-    // false by default
-    var dataIsReady = false;
+    var tempSingleStudentImgs = [];
 
     // DEV. local testing
     var students = [];
@@ -52,9 +47,6 @@ $(document).ready(function () {
         // request to DB
         getAllStudents();
 
-        // testing pulls of images from DB
-        //TODO: the request is working on the server-side, but the request that coming from the client is noe good. look into it.
-        getStudentImages(2)
     }
 
     // will take an array of students (pulled from server)
@@ -185,14 +177,21 @@ $(document).ready(function () {
             dataType: 'json',
             success: function(students) {
                 console.log('> List of Students: ', students);
+                students.forEach(function (singleStudent) {
+                    console.log('singleStudent: ', singleStudent);
+                    // im saving imgs per student globaly for now. FIX the async shit
+                    getStudentImages(singleStudent.s_img);
+                });
                 setDataToStudents(students);
+            },
+            error       : function (err) {
+                console.log('> Error: ', err);
             }
         });
     }
 
     // service to pull the images of the student,
     // done after the student is already pulled from DB
-    // TODO: figure out how to assemble the right ajax request to get the images.
     function getStudentImages(studentImgId) {
         // ajax get when success setDataToStudents
         $.ajax({
@@ -202,6 +201,7 @@ $(document).ready(function () {
             dataType    : 'json',
             success     : function (studentImgs) {
                 console.log('> image list: ', studentImgs);
+                tempSingleStudentImgs = studentImgs;
             },
             error       : function (err) {
                 console.log('> Error: ', err);

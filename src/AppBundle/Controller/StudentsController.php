@@ -21,19 +21,8 @@ class StudentsController extends Controller
     {
         // services
         $studentsService = Scope::skeleton()->get(IStudentService::class);
-        $imgService      = Scope::skeleton()->get(IImageService::class);
 
         $qResult         = $studentsService->getAllStudents();
-
-        //$allStudents     = Student::allFromArray($qResult);
-
-        /*foreach ($qResult as $student){
-            $imgData         = $imgService->getImageByID($student->s_img);
-            $student->s_img  = $imgData[2];
-
-            //$student->s_img = $thumbnail;
-        };*/
-
         $response        = json_encode($qResult);
 
         return new Response($response);
