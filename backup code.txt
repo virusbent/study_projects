@@ -1,0 +1,80 @@
+// service to get all the students that are saved in DB
+    // TODO: application/x-www-form-urlencoded ??
+    function getAllStudents() {
+        $.ajax({
+            type: 'GET',
+            url: '/getAllStudents',
+            dataType: 'json',
+            success: function(students) {
+                students.forEach(function (singleStudent) {
+                    getStudentImages_promises(singleStudent.s_img)
+                        .then(function (studentImgs) {
+                            // instead of id in s_img, i insert an array that contains id, img and thumbnail
+                            singleStudent.s_img = studentImgs;
+                            console.log('singleStudent', singleStudent);
+                        })
+                        .catch(function (err) {
+                            console.log('Error: ', err);
+                        })
+                });
+                setDataToStudents(students);
+            },
+            error       : function (err) {
+                console.log('> Error: ', err);
+            }
+        });
+    }
+
+
+// service to pull the images of the student,
+    // done after the student is already pulled from DB
+    function getStudentImages(studentImgId) {
+        // ajax get when success setDataToStudents
+        $.ajax({
+            type        : 'GET',
+            url         : '/getStudentImgs/'+ studentImgId,
+            //data        : {studentImgId: studentImgId},
+            dataType    : 'json',
+            success     : function (studentImgs) {
+                console.log('> image list: ', studentImgs);
+                tempSingleStudentImgs = studentImgs;
+            },
+            error       : function (err) {
+                console.log('> Error: ', err);
+            }
+        });
+    }
+
+
+
+// pulling students from the server WITH PROMISES.
+    function getAllStudents() {
+        return new Promise(function (fulfill, reject) {
+            $.ajax({
+                type: 'GET',
+                url: '/getAllStudents',
+                dataType: 'json'
+            })
+                .then(function (response) {
+                    return response;
+                })
+                .then(function (students) {
+                    var modified_students = [];
+                    students.forEach(function (singleStudent) {
+                        getStudentImages(singleStudent.s_img)
+                            .then(function (studentImgs) {
+                                // instead of id in s_img, i insert an array that contains id, img and thumbnail
+                                singleStudent.s_img = studentImgs;
+                                return singleStudent;
+                            })
+                            .then(function (student) {
+                                modified_students.push(student);
+                            })
+                    });
+                })
+                .catch(function (err) {
+                    console.log('Error : ', err);
+                    reject(err);
+                })
+        })
+    }

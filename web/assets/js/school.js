@@ -3,10 +3,12 @@
  */
 $(document).ready(function () {
 
+    //var Promise = require("bluebird");
+
     var tempSingleStudentImgs = [];
 
     // DEV. local testing
-    var students = [];
+    //var students = [];
 
     // actual var for saving students from server
     var allStudents;
@@ -42,11 +44,14 @@ $(document).ready(function () {
 
     function init() {
         // request to randomuser.me api to get mock data. DEV ONLY
-        getMockStudents();
+        //getMockStudents();
 
         // request to DB
-        getAllStudents();
-
+        getAllStudents()
+            .then(function (students) {
+                console.log('getAllStudents ', students);
+                setDataToStudents(students);
+            })
     }
 
     // will take an array of students (pulled from server)
@@ -60,11 +65,13 @@ $(document).ready(function () {
             <span class="col-lg-8"> student phone </span>
          </div>
        </li> */
-    function populateStudents() {
+    function populateStudentsList(students) {
         var studentList = $("#student-list");
-        $.each(allStudents, function (i) {
+        console.log('populateStudentsList --------> ', students);
+        $.each(students, function (i) {
+            console.log(' * ',students[i]);
             var studentUnit = $('<li/>')
-                .attr('id', allStudents[i].s_ID)
+                .attr('id', students[i].s_ID)
                 .addClass('list-group-item')
                 .appendTo(studentList)
                 .on('click', function (event) {
@@ -76,18 +83,19 @@ $(document).ready(function () {
                 .addClass('row')
                 .appendTo(studentUnit);
 
+            // students[i][2][2] for student thumbnail. (students[s_img][thumb]).
             /*var thumb = $('<img/>')
                 .addClass('col-lg-4')
-                .attr('src', students[i][2])
+                .attr('src', students[i].s_img[2])
                 .appendTo(row);*/
 
             var name = $('<span/>')
-                .text(allStudents[i].s_name)
+                .text(students[i].s_name)
                 .addClass('col-lg-8')
                 .appendTo(row);
 
             var phone = $('<span/>')
-                .text(allStudents[i].s_phone)
+                .text(students[i].s_phone)
                 .addClass('col-lg-8')
                 .appendTo(row);
         })
@@ -96,7 +104,7 @@ $(document).ready(function () {
     // manipulating the main view by changing the visibility on
     // add-student/course, student-details
     // only one visible at a time.
-    // TODO: change the 'student-id-pulled-from-server' case according to the changes made to studentUnit in populateStudents().
+    // TODO: change the 'student-id-pulled-from-server' case according to the changes made to studentUnit in populateStudentsList().
     function mainViewManip(viewToShow) {
         console.log('> clicked on: ', viewToShow);
         switch(viewToShow){
@@ -163,53 +171,58 @@ $(document).ready(function () {
     function setDataToStudents(data) {
         console.log('> set this data to students: ', data);
         allStudents = data;
+        populateStudentsList(data);
     }
 
 
     // *** SERVICES *****************
 
-    // service to get all the students that are saved in DB
-    // TODO: application/x-www-form-urlencoded ??
+    // pulling students from the server.
     function getAllStudents() {
-        $.ajax({
-            type: 'GET',
-            url: '/getAllStudents',
-            dataType: 'json',
-            success: function(students) {
-                console.log('> List of Students: ', students);
-                students.forEach(function (singleStudent) {
-                    console.log('singleStudent: ', singleStudent);
-                    // im saving imgs per student globaly for now. FIX the async shit
-                    getStudentImages(singleStudent.s_img);
-                });
-                setDataToStudents(students);
-            },
-            error       : function (err) {
-                console.log('> Error: ', err);
-            }
+        var modStudents = [];
+        return new Promise(function (fulfill, reject) {
+            $.ajax({
+                type: 'GET',
+                url: '/getAllStudents',
+                dataType: 'json'
+            })
+                .then(function (response) {
+                    console.log('responseeeeee ', response);
+                    response.forEach(function (student) {
+                        getStudentImages(student.s_img)
+                            .then(function (studentImgs) {
+                                student.s_img = studentImgs;
+                            })
+                    });
+                    return response;
+                })
+                .then(function (students) {
+                    console.log('modified students', students);
+                    fulfill(students);
+                })
+        })
+    }
+    
+    // getting images per student. executes after getAllStudents() got response from the server.
+    function getStudentImages(s_img_id) {
+        return new Promise(function (fulfill, reject) {
+            $.ajax({
+                type: 'GET',
+                url: '/getStudentImgs/' + s_img_id,
+                dataType: 'json'
+            })
+                .then(function (response) {
+                    fulfill(response);
+                })
+                .catch(function (err) {
+                    console.log('Error: ', err);
+                    reject(err);
+                })
+
         });
     }
 
-    // service to pull the images of the student,
-    // done after the student is already pulled from DB
-    function getStudentImages(studentImgId) {
-        // ajax get when success setDataToStudents
-        $.ajax({
-            type        : 'GET',
-            url         : '/getStudentImgs/'+ studentImgId,
-            //data        : {studentImgId: studentImgId},
-            dataType    : 'json',
-            success     : function (studentImgs) {
-                console.log('> image list: ', studentImgs);
-                tempSingleStudentImgs = studentImgs;
-            },
-            error       : function (err) {
-                console.log('> Error: ', err);
-            }
-        });
-    }
-
-    // service to get a random student for testing
+    // TESTING: service to get a random student
     function getMockStudents() {
         $.ajax({
             url: 'https://randomuser.me/api/',
@@ -217,7 +230,7 @@ $(document).ready(function () {
             success: function(data) {
                 students = [[data.results[0].name.first+ ' ' + data.results[0].name.last,
                     data.results[0].cell, data.results[0].picture.thumbnail]];
-                populateStudents();
+                populateStudentsList();
             }
         });
     }
