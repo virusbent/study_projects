@@ -106,12 +106,14 @@ $objects         = Student::allFromArray($qResult);
 //var_dump($objects[0]->s_img);
 
 
-// get thumbnail of each student
-foreach ($objects as $student){
-    //var_dump($student->s_img);
-    $imgs = $imgService->getImageByID($student->s_img)[2];
-    var_dump($imgs);
-};
+$service = Scope::skeleton()->get(\AppBundle\Base\DAO\ICourses_StudentsDAO::class);
+$courses = array();
+$coursesIDs = $service->getAllCoursesOfStudent(7);
+foreach ($coursesIDs as $singleCourseId){
+    array_push($courses, $courseDAO->load($singleCourseId));
+}
+var_dump($courses);
+die;
 
 
 //$objects = Student::allFromArray($qResult);

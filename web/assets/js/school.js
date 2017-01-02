@@ -25,14 +25,12 @@ $(document).ready(function () {
 
     $("#add-student").on("click", function (event) {
         $("#count").hide();
-        mainViewManip(event.target.id);
-        //showStudentForm();
+        mainViewCtrl(event.target.id, null);
     });
 
     $("#add-course").on("click", function (event) {
         $("#count").hide();
-        //showCourseForm();
-        mainViewManip(event.target.id);
+        mainViewCtrl(event.target.id, null);
     });
 
     $("#close-btn").on("click", function () {
@@ -51,12 +49,17 @@ $(document).ready(function () {
             .then(function (students) {
                 console.log('getAllStudents ', students);
                 setDataToStudents(students);
+
+                //TODO: FINISH TESTING THIS
+                getStudentCourses(7);
             })
     }
 
+
+
+
     // will take an array of students (pulled from server)
     // and create <li> item for each one of the students in the array.
-
     // structure :
     /* <li class="list-group-item">
          <div class="row">
@@ -68,26 +71,27 @@ $(document).ready(function () {
     function populateStudentsList(students) {
         var studentList = $("#student-list");
         console.log('populateStudentsList --------> ', students);
+        console.log('       images        --------> ', students[1].s_img[2]);
         $.each(students, function (i) {
-            console.log(' * ',students[i]);
             var studentUnit = $('<li/>')
                 .attr('id', students[i].s_ID)
                 .addClass('list-group-item')
                 .appendTo(studentList)
                 .on('click', function (event) {
                     // show student details on the main view.
-                    mainViewManip('student-id-pulled-from-server');
+                    //mainViewCtrl('show-student', students[i].s_ID);
+                    mainViewCtrl('show-student', students[i]);
                 });
 
             var row = $('<div/>')
                 .addClass('row')
                 .appendTo(studentUnit);
 
-            // students[i][2][2] for student thumbnail. (students[s_img][thumb]).
-            /*var thumb = $('<img/>')
+            // students[i].s_img[2] for student thumbnail. (students[s_img][thumb]).
+            var thumb = $('<img/>')
                 .addClass('col-lg-4')
                 .attr('src', students[i].s_img[2])
-                .appendTo(row);*/
+                .appendTo(row);
 
             var name = $('<span/>')
                 .text(students[i].s_name)
@@ -105,7 +109,8 @@ $(document).ready(function () {
     // add-student/course, student-details
     // only one visible at a time.
     // TODO: change the 'student-id-pulled-from-server' case according to the changes made to studentUnit in populateStudentsList().
-    function mainViewManip(viewToShow) {
+    function mainViewCtrl(viewToShow, student) {
+        //var studentId = student.s_ID;
         console.log('> clicked on: ', viewToShow);
         switch(viewToShow){
             // if course+ was clicked
@@ -123,51 +128,50 @@ $(document).ready(function () {
                 studentForm.removeClass("hidden");
                 break;
             // if clicked on the specific student
-            case 'student-id-pulled-from-server':
+            case 'show-student':
+                console.log('will show student with id: ', student);
                 studentForm.addClass("hidden");
                 courseForm.addClass("hidden");
-                // show details
+                // show details view
                 studentDetails.removeClass("hidden");
+                if (student.s_ID !== null){
+                    showStudentDetails(student);
+                }
                 break;
         }
     }
 
-    /*function showCourseForm() {
-        console.log('adding new course');
-        if(  studentForm.hasClass(".hidden") ){
-            courseForm.removeClass("hidden");
-        }
-        else {
-            studentForm.addClass("hidden");
-            courseForm.removeClass("hidden");
-        }
+    // walk through allStudents array and returns student with requested id.
+    function findStudentByID(id) {
+        allStudents.map(function (student) {
+            if(student.s_ID === id){
+                return student;
+            }
+            else {
+                return null;
+            }
+        })
     }
 
-    function showStudentForm() {
-        console.log('adding new student');
-        // first check if another form is hidden
-        if(  courseForm.hasClass(".hidden") ){
-            studentForm.removeClass("hidden");
-        }
-        else {
-            courseForm.addClass("hidden");
-            studentForm.removeClass("hidden");
-        }
-    }*/
+    // will receive student id and will push his data to the view.
+    function showStudentDetails(studentToShow) {
+        // needed selectors
+        var img     = $("#student-img");
+        var name    = $("#student-name");
+        var phone   = $("#student-phone");
+        var email   = $("#student-email");
 
-    // will receive student-id and will show details view of this student
-    function showStudentDetails() {
-        console.log('showing student details');
-        if(  studentForm.hasClass(".hidden") && courseForm.hasClass("hidden")){
-            studentDetails.removeClass("hidden");
-        }
-        else {
-            studentForm.addClass("hidden");
-            courseForm.addClass("hidden");
-            studentDetails.removeClass("hidden");
-        }
+        //pushing data to student's containers
+        //studentToShow.s_img[1] student's big image
+        img.attr('src', studentToShow.s_img[1]);
+        name.text(studentToShow.s_name);
+        phone.text(studentToShow.s_phone);
+        email.text(studentToShow.s_email);
+
     }
 
+    // will set received data from the server to the global var allStudents
+    // and will push fill the data in the list of students thumbnail profiles.
     function setDataToStudents(data) {
         console.log('> set this data to students: ', data);
         allStudents = data;
@@ -179,27 +183,28 @@ $(document).ready(function () {
 
     // pulling students from the server.
     function getAllStudents() {
-        var modStudents = [];
         return new Promise(function (fulfill, reject) {
             $.ajax({
-                type: 'GET',
-                url: '/getAllStudents',
+                type    : 'GET',
+                url     : '/getAllStudents',
                 dataType: 'json'
             })
                 .then(function (response) {
-                    console.log('responseeeeee ', response);
-                    response.forEach(function (student) {
-                        getStudentImages(student.s_img)
-                            .then(function (studentImgs) {
-                                student.s_img = studentImgs;
-                            })
-                    });
-                    return response;
+                    Promise.each(response, function (student) {
+                        return getStudentImages(student.s_img)
+                                .then(function (studentImgs) {
+                                    student.s_img = studentImgs;
+                                });
+                    })
+                        .then(function (modifiedStudents) {
+                            console.log('modified students: ', modifiedStudents);
+                            fulfill(modifiedStudents);
+                        })
                 })
-                .then(function (students) {
-                    console.log('modified students', students);
-                    fulfill(students);
+                .catch(function (err) {
+                    console.log('Error: ', err);
                 })
+
         })
     }
     
@@ -221,21 +226,6 @@ $(document).ready(function () {
 
         });
     }
-
-    // TESTING: service to get a random student
-    function getMockStudents() {
-        $.ajax({
-            url: 'https://randomuser.me/api/',
-            dataType: 'json',
-            success: function(data) {
-                students = [[data.results[0].name.first+ ' ' + data.results[0].name.last,
-                    data.results[0].cell, data.results[0].picture.thumbnail]];
-                populateStudentsList();
-            }
-        });
-    }
-
-
 
     init();
 

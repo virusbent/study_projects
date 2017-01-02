@@ -24,7 +24,6 @@ class ImagesController extends Controller
         $imgService      = Scope::skeleton()->get(IImageService::class);
 
         $imgs            = $imgService->getImageByID($studentImgId);
-        $imgsJson        = json_encode($imgs);
 
         return new JsonResponse($imgs);
     }

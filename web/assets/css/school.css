@@ -18,5 +18,12 @@
 .btn-right{
     display: flex;
     align-self: flex-end;
+}
 
+.profile-img{
+    width: 150px;
+    height: 150px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }

@@ -14,7 +14,7 @@ use AppBundle\Objects\Course;
 use AppBundle\Scope;
 use Squid\MySql\Impl\Connectors\MySqlAutoIncrementConnector;
 
-class CourseDao implements ICourseDAO
+class CourseDAO implements ICourseDAO
 {
     const TABLE = 'courses';
 

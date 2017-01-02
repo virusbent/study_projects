@@ -78,3 +78,12 @@
                 })
         })
     }
+
+
+response.forEach(function (student) {
+                        studentImagesPromise = getStudentImages(student.s_img)
+                                .then(function (studentImgs) {
+                                    student.s_img = studentImgs;
+                                });
+                        arrayOfPromises.push(studentImagesPromise);
+                    });

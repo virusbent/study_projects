@@ -10,6 +10,7 @@ namespace AppBundle\Services;
 
 use AppBundle\Base\DAO\ICourses_StudentsDAO;
 use AppBundle\Base\DAO\IStudentDAO;
+use AppBundle\Base\DAO\ICourseDAO;
 use AppBundle\Scope;
 use AppBundle\Base\DAO\IStudentService;
 use AppBundle\Objects\Student;
@@ -24,6 +25,12 @@ class StudentService implements IStudentService
      * @var \AppBundle\Base\DAO\IStudentDAO
      */
     private $studentDAO;
+
+    /**
+     * @autoload
+     * @var \AppBundle\Base\DAO\ICourseDAO
+     */
+    private $courseDAO;
 
     /**
      * @autoload
@@ -57,6 +64,7 @@ class StudentService implements IStudentService
     public function getStudentCourses($id)
     {
         return $this->coursesOfStudentDAO->getAllCoursesOfStudent($id);
+
     }
 
     /**
