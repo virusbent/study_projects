@@ -23,8 +23,11 @@ class CourseDAO implements ICourseDAO
      */
     private $connector;
 
+    private $mysql;
+
     public function __construct()
     {
+        $this->mysql     = Scope::connector();
         $this->connector = new MySqlAutoIncrementConnector();
         $this->connector
                 ->setConnector(Scope::connector())
@@ -65,5 +68,14 @@ class CourseDAO implements ICourseDAO
     public function update(Course $course)
     {
         $this->connector->update($course);
+    }
+
+    /**
+     * @return array|null
+     */
+    public function loadAll()
+    {
+        $select = $this->mysql->select();
+        return $select->from(self::TABLE)->queryAll(true);
     }
 }

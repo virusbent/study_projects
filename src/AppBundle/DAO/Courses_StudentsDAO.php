@@ -51,4 +51,26 @@ class Courses_StudentsDAO implements ICourses_StudentsDAO
         $result = $select->queryColumn();
         return $result;
     }
+
+    /**
+     * @param int   $student_id
+     * @param array $courses
+     */
+    public function saveCoursesOfStudent($student_id, $courses)
+    {
+        $save = $this->connector->insert();
+        foreach ($courses as $course){
+            $save->into(self::TABLE, 'cs_course_ID', 'cs_student_ID')
+                ->values($student_id, $course)->execute();
+        };
+    }
+
+    /**
+     * @param int   $courses_id
+     * @param array $students
+     */
+    public function saveStudentsOfCourse($courses_id, $students)
+    {
+        // TODO: Implement saveStudentsOfCourse() method.
+    }
 }

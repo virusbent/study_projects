@@ -27,6 +27,7 @@ interface IStudentDAO
 
     /**
      * @param Student $student
+     * return int $s_id
      */
     public function save(Student $student);
 

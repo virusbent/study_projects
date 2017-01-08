@@ -24,4 +24,16 @@ interface ICourses_StudentsDAO
      * @return array|null
      */
     public function getAllStudentsOfCourse($id);
+
+    /**
+     * @param int $student_id
+     * @param array $courses
+     */
+    public function saveCoursesOfStudent($student_id, $courses);
+
+    /**
+     * @param int $courses_id
+     * @param array $students
+     */
+    public function saveStudentsOfCourse($courses_id, $students);
 }

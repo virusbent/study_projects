@@ -44,10 +44,13 @@ class StudentDAO implements IStudentDAO
 
     /**
      * @param Student $student
+     * return int $s_id
      */
     public function save(Student $student)
     {
         $this->connector->save($student);
+        $s_id = $this->connector->getConnector()->controller()->lastId();
+        return $s_id;
     }
 
     /**

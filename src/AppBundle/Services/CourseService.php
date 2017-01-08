@@ -32,6 +32,14 @@ class CourseService implements ICourseService
     private $studentsOfCourseDAO;
 
     /**
+     * @return array|null
+     */
+    public function getAllCourses()
+    {
+        return $this->courseDAO->loadAll();
+    }
+
+    /**
      * @param int $id
      * @return Course|null
      */
@@ -70,6 +78,6 @@ class CourseService implements ICourseService
      */
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $this->courseDAO->delete($id);
     }
 }

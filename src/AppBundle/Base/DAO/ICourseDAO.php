@@ -25,6 +25,11 @@ interface ICourseDAO
     public function load($id);
 
     /**
+     * @return array|null
+     */
+    public function loadAll();
+
+    /**
      * @param Course $course
      */
     public function save(Course $course);

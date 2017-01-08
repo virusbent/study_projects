@@ -68,11 +68,13 @@ class StudentService implements IStudentService
     }
 
     /**
+     * Saves new Student and return generated id by mysql
      * @param Student $student
+     * return int $s_id
      */
     public function saveStudent(Student $newStudent)
     {
-        $this->studentDAO->save($newStudent);
+        return $this->studentDAO->save($newStudent);
     }
 
     /**
@@ -97,5 +99,17 @@ class StudentService implements IStudentService
     public function getAllStudents()
     {
         return $this->studentDAO->loadAll();
+    }
+
+    /**
+     * $courses is an array of courses ids.
+     * @param int   $id
+     * @param array $courses
+     */
+    public function saveStudentCourses($id, $courses)
+    {
+        foreach ($courses as $course_id){
+            $this->coursesOfStudentDAO->saveCoursesOfStudent($id, $course_id);
+        }
     }
 }

@@ -26,15 +26,18 @@ $adminDAO = Scope::skeleton()->get(IAdminDAO::class);
 
 $imgDAO = Scope::skeleton()->get(IImageDAO::class);
 
-//works - saving Student to DB (generated)from array.
-/*$newStudent = new Student();
+// works - saving Student to DB (generated)from array and returning of the generated id
+$newStudent = new Student();
 $newStudent->fromArray([
     's_name'      => 'Haruz',
     's_email'     => 'haruz@gmail.com',
-    's_phone'     => '0528864232',
-    's_img'       => 2
+    's_phone'     => '0528864232'
 ]);
-$studentDAO->save($newStudent);*/
+$studentsService    = Scope::skeleton()->get(IStudentService::class);
+$newStudentID       = $studentsService->saveStudent($newStudent);
+var_dump($newStudentID);
+die;
+
 
 //works
 /*$data = [
@@ -99,7 +102,7 @@ $imgService->saveImage($newImg);*/
 $adminRole      = $adminService->getAdminRole(3);
 var_dump($adminRole);*/
 
-$imgService      = Scope::skeleton()->get(IImageService::class);
+/*$imgService      = Scope::skeleton()->get(IImageService::class);
 $studentsService = Scope::skeleton()->get(IStudentService::class);
 $qResult         = $studentsService->getAllStudents();
 $objects         = Student::allFromArray($qResult);
@@ -113,7 +116,7 @@ foreach ($coursesIDs as $singleCourseId){
     array_push($courses, $courseDAO->load($singleCourseId));
 }
 var_dump($courses);
-die;
+die;*/
 
 
 //$objects = Student::allFromArray($qResult);

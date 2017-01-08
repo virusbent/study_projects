@@ -42,6 +42,12 @@ interface IStudentService
     public function saveStudent(Student $student);
 
     /**
+     * courses is an array of courses ids.
+     * @param int $id
+     * @param array $courses
+     */
+    public function saveStudentCourses($id, $courses);
+    /**
      * @param int $id
      */
     public function deleteStudent($id);

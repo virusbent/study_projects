@@ -19,6 +19,23 @@ function getStudentCourses(student_id) {
     });
 }
 
-
-
 window.getStudentCourses = getStudentCourses;
+/*
+function getStudentImgsAndCourses(student_id) {
+    return new Promise(function (fulfill, reject) {
+        $.ajax({
+            type    : 'GET',
+            url     : '/getStudentImgsAndCourses/' + student_id,
+            dataTpe : 'JSON'
+        });
+            .then(function (data) {
+                console.log('>> getStudentImgsAndCourses: data -> \r\n' + data);
+                fulfill(data);
+            })
+            .catch(function (err) {
+                console.log('>> getStudentImgsAndCourses: Error -> ', err);
+                reject(err);
+            })
+    })
+}
+window.getStudentImgsAndCourses = getStudentImgsAndCourses;*/

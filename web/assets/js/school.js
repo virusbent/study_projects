@@ -1,17 +1,18 @@
 /**
  * Created by evgeniy on 16/12/16.
  */
+// *** GLOBALS **************
+
+// actual var for saving students from server
+var allStudents;
+
+// actual var for saving courses from server
+var allCourses;
+
+
 $(document).ready(function () {
 
-    //var Promise = require("bluebird");
-
     var tempSingleStudentImgs = [];
-
-    // DEV. local testing
-    //var students = [];
-
-    // actual var for saving students from server
-    var allStudents;
 
     // *** SELECTORS **************
 
@@ -41,17 +42,27 @@ $(document).ready(function () {
     // *** FUNCTIONS **************
 
     function init() {
-        // request to randomuser.me api to get mock data. DEV ONLY
-        //getMockStudents();
+        // show count of all students and courses
+        $('#count').show();
 
-        // request to DB
+        getAllData();
+    }
+
+    // responsible for retrieving student and course Data from the server.
+    function getAllData() {
+        // request to DB and push the response to the list of students
         getAllStudents()
             .then(function (students) {
-                console.log('getAllStudents ', students);
-                setDataToStudents(students);
+                // set to global var of students
+                allStudents = students;
+                // push the data to the list of students on the view
+                populateStudentsList(students);
+            });
 
-                //TODO: FINISH TESTING THIS
-                getStudentCourses(7);
+        // request to DB for all registered courses
+        getAllCourses()
+            .then(function (courses) {
+                allCourses = courses;
             })
     }
 
@@ -71,7 +82,6 @@ $(document).ready(function () {
     function populateStudentsList(students) {
         var studentList = $("#student-list");
         console.log('populateStudentsList --------> ', students);
-        console.log('       images        --------> ', students[1].s_img[2]);
         $.each(students, function (i) {
             var studentUnit = $('<li/>')
                 .attr('id', students[i].s_ID)
@@ -108,13 +118,12 @@ $(document).ready(function () {
     // manipulating the main view by changing the visibility on
     // add-student/course, student-details
     // only one visible at a time.
-    // TODO: change the 'student-id-pulled-from-server' case according to the changes made to studentUnit in populateStudentsList().
     function mainViewCtrl(viewToShow, student) {
-        //var studentId = student.s_ID;
-        console.log('> clicked on: ', viewToShow);
+        //console.log('> clicked on: ', viewToShow);
         switch(viewToShow){
             // if course+ was clicked
             case 'add-course':
+                $('#count').hide();
                 studentDetails.addClass("hidden");
                 studentForm.addClass("hidden");
                 // show course add form
@@ -122,14 +131,17 @@ $(document).ready(function () {
                 break;
             // if student+ was clicked
             case 'add-student':
+                $('#count').hide();
                 studentDetails.addClass("hidden");
                 courseForm.addClass("hidden");
                 // show student add form
                 studentForm.removeClass("hidden");
+                // TODO: show all available courses in the add-new-student view
+                showCoursesForSelection();
                 break;
             // if clicked on the specific student
             case 'show-student':
-                console.log('will show student with id: ', student);
+                $('#count').hide();
                 studentForm.addClass("hidden");
                 courseForm.addClass("hidden");
                 // show details view
@@ -142,7 +154,7 @@ $(document).ready(function () {
     }
 
     // walk through allStudents array and returns student with requested id.
-    function findStudentByID(id) {
+    /*function findStudentByID(id) {
         allStudents.map(function (student) {
             if(student.s_ID === id){
                 return student;
@@ -151,15 +163,19 @@ $(document).ready(function () {
                 return null;
             }
         })
-    }
+    }*/
 
     // will receive student id and will push his data to the view.
     function showStudentDetails(studentToShow) {
         // needed selectors
-        var img     = $("#student-img");
-        var name    = $("#student-name");
-        var phone   = $("#student-phone");
-        var email   = $("#student-email");
+        var img         = $("#student-img");
+        var name        = $("#student-name");
+        var phone       = $("#student-phone");
+        var email       = $("#student-email");
+        var courseList  = $("#this-student-courses");
+
+        // first clean the previous presented courses, if was presented
+        courseList.empty();
 
         //pushing data to student's containers
         //studentToShow.s_img[1] student's big image
@@ -168,14 +184,56 @@ $(document).ready(function () {
         phone.text(studentToShow.s_phone);
         email.text(studentToShow.s_email);
 
+        if (studentToShow.s_courses !== null)
+        {
+            var courses = studentToShow.s_courses;
+            courses.map(function (course) {
+                var courseUnit = $('<li/>')
+                    .text(course.c_name)
+                    .attr('id', course.c_ID)
+                    .addClass('list-group-item')
+                    .appendTo(courseList);
+            });
+        }
+        else
+        {
+            var courseUnit = $('<li/>')
+                .appendTo(courseList)
+                .addClass('list-group-item')
+                .text('Not assigned to any course')
+                .append(
+                    $('<button/>')
+                        .addClass('btn btn-primary btn-block')
+                        .attr({type:"button", id : studentToShow.s_ID})
+                        .text('Add Course')
+                        .on('click', function (event) {
+                            addCourseToStudent(event.target.id);
+                        })
+                );
+        }
+
+
     }
 
-    // will set received data from the server to the global var allStudents
-    // and will push fill the data in the list of students thumbnail profiles.
-    function setDataToStudents(data) {
-        console.log('> set this data to students: ', data);
-        allStudents = data;
-        populateStudentsList(data);
+    // TODO: a variable that returns from the helper function is undefined, fix that
+    function addCourseToStudent(student_id) {
+        console.log('Add course to student with ID: ', student_id);
+        findStudentByID(student_id, function (student) {
+            console.log('student is: ', student);
+            if (typeof student != 'string')
+            {
+                mainViewCtrl('add-course');
+            }
+            else
+            {
+                console.log('Error: ', student);
+            }
+        });
+        /*if (student !== null && !undefined)
+            console.log('student -> ', student);
+            //mainViewCtrl('add-student');
+        else
+            console.log('student is null');*/
     }
 
 
@@ -187,29 +245,62 @@ $(document).ready(function () {
             $.ajax({
                 type    : 'GET',
                 url     : '/getAllStudents',
-                dataType: 'json'
+                dataType: 'JSON'
             })
                 .then(function (response) {
                     Promise.each(response, function (student) {
-                        return getStudentImages(student.s_img)
-                                .then(function (studentImgs) {
-                                    student.s_img = studentImgs;
-                                });
+                        return getStudentImgsAndCourses(student.s_ID)
+                            .then(function (data) {
+                                student.s_img   = data[0];
+                                if (data[1].length != 0)
+                                    student.s_courses = data[1];
+                                else student.s_courses = null;
+                            });
                     })
                         .then(function (modifiedStudents) {
-                            console.log('modified students: ', modifiedStudents);
+                            //console.log('modified students: ', modifiedStudents);
                             fulfill(modifiedStudents);
                         })
                 })
                 .catch(function (err) {
-                    console.log('Error: ', err);
+                    console.log('getAllStudents - Error: ', err);
+                    reject(err);
                 })
 
         })
     }
     
+    function getAllCourses() {
+        return new Promise(function (fulfill, reject) {
+            $.ajax({
+                type    : 'GET',
+                url     : '/getAllCourses',
+                dataType: 'JSON'
+            })
+                .then(function (all_courses) {
+                    Promise.each(all_courses, function (course) {
+                        return getCourseImgsAndStudents(course.c_ID)
+                            .then(function (data) {
+                                course.c_img = data[0];
+                                if (data[1].length != 0)
+                                    course.c_students = data[1];
+                                else course.c_students = null;
+                            })
+                    })
+                        .then(function (modifiedCourses) {
+                            //console.log('modified -------> ', modifiedCourses);
+                            fulfill(modifiedCourses);
+                        })
+                })
+                .catch(function (err) {
+                    console.log('getAllCourses - Error: ', err);
+                    reject(err);
+                })
+        })
+    }
+    
     // getting images per student. executes after getAllStudents() got response from the server.
-    function getStudentImages(s_img_id) {
+    /*function getStudentImages(s_img_id) {
         return new Promise(function (fulfill, reject) {
             $.ajax({
                 type: 'GET',
@@ -225,7 +316,42 @@ $(document).ready(function () {
                 })
 
         });
+    }*/
+
+    function getStudentImgsAndCourses(student_id) {
+        return new Promise(function (fulfill, reject) {
+            $.ajax({
+                type: 'GET',
+                url: '/getStudentImgsAndCourses/' + student_id,
+                dataTpe: 'JSON'
+            })
+                .then(function (response) {
+                    fulfill(response);
+                })
+                .catch(function (err) {
+                    console.log('getStudentImgsAndCourses - Error: ', err);
+                    reject(err);
+                })
+        });
     }
+
+    function getCourseImgsAndStudents(course_id) {
+        return new Promise(function (fulfill, reject) {
+            $.ajax({
+                type    : 'GET',
+                url     : '/getCourseImgsAndStudents/' + course_id,
+                dataType: 'JSON'
+            })
+                .then(function (course_additional_data) {
+                    fulfill(course_additional_data);
+                })
+                .catch(function (err) {
+                    console.log('getCourseImgsAndStudents - Error: ', err);
+                    reject(err);
+                })
+        })
+    }
+
 
     init();
 
