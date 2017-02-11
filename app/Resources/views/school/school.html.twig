@@ -14,11 +14,7 @@
                         </div>
                         <div class="col-lg-12">
                             <ul class="list-group" id="course-list">
-                                <li class="list-group-item">
-                                    <div id="course-profile-thumbnail">
-                                        <span id="course-name"></span>
-                                    </div>
-                                </li>
+                                {# JS generated #}
                             </ul>
                         </div>
                     </div>
@@ -29,7 +25,7 @@
                         </div>
                         <div class="col-lg-12">
                             <ul class="list-group" id="student-list">
-                                {#---hard codded for now---#}
+                                {#--- JS genereated ---#}
                                 {#<li class="list-group-item">
                                     <div id="student-profile-thumbnail">
                                         <span id="student-name"></span><br>
@@ -49,6 +45,10 @@
 
                         <div class="hidden" id="details-student">
                             {% include 'details/student/studentDetails.html.twig' %}
+                        </div>
+
+                        <div class="hidden" id="details-course">
+                            {% include 'details/course/courseDetails.html.twig' %}
                         </div>
 
                         <div class="hidden" id="add-new-course">
@@ -74,5 +74,7 @@
     <script src="{{ asset('assets/js/school.js') }}"></script>
     <script src="{{ asset('assets/js/getFunctions.js') }}"></script>
     <script src="{{ asset('assets/js/helpers.js') }}"></script>
+    <script src="{{ asset('assets/js/DOM-manipulations/populateList.js') }}"></script>
+    <script src="{{ asset('assets/js/DOM-manipulations/mainViewCtrl.js') }}"></script>
     <script src="{{ asset('assets/js/services/student-services.js') }}"></script>
 {% endblock %}

@@ -19,54 +19,69 @@ $(document).ready(function () {
         if (foundStudent !== null && typeof foundStudent != 'undefined')
             passResult(foundStudent);
         else
-            passResult('No such student is found');     // error
+            passResult('No such student is found');     // handle error
 
     }
 
-    function showCoursesForSelection() {
-        var courseList = $('#list-of-courses-to-add');
-        //console.log('showCoursesForSelection - reached!\r\n', allCourses);
-        allCourses.forEach(function (course) {
-            /* var input = $('<li/>')
-             .attr({
-             'id'    : 'course-item-' + course.c_ID,
-             'type'  : 'checkbox'
-             })
-             .text(course.c_name)
-             .appendTo(courseList);*/
-            var item = $('<li/>')
-                .attr('id', 'course-item-' + course.c_ID)
-                .addClass('list-group-item')
-                .text(course.c_name)
-                .appendTo(courseList)
-                .on('click', function () {
-                    $(this).toggleClass('active');
-                });
+    // walk through allCourses array and returns course with requested id.
+    function findCourseByID(id, passResult) {
+        var foundCourse;
+        allCourses.map(function (course) {
+            if(course.c_ID === id){
+                console.log('course is found: ', course);
+                foundCourse = course;
+            }
+            else {
+                return
+            }
         });
+
+        if (foundCourse !== null && typeof foundCourse != 'undefined')
+            passResult(foundCourse);
+        else
+            passResult('No such Course is found');     // handle error
+
     }
+
+    function processStudentImage(event) {
+        event.preventDefault();
+        /* selectors */
+        var image = $('#upload-img-student').prop("files")[0];
+        var form  = new FormData(this);
+        form.append('student_img', image);
+        console.log('sending image to server...', form);
+        handleStudentImage(form).then(function (response) {
+            console.log('...response from server: ', response);
+        })
+    }
+
+
+
 
     function processStudentData(event) {
         event.preventDefault();
         // * selectors *
         var selectedCourses = $('#list-of-courses-to-add').children().filter('.active');
+        var id              = parseInt($('#student-info-inputs').find('span:hidden').val());
         var name            = $('#new-student-name').val();
         var email           = $('#new-student-email').val();
         var phone           = $('#new-student-phone').val();
-
-        allInputs = $(":input");
+        var img             = $('#upload-img-student')[0].files;
 
         // * variables *
         var len             = selectedCourses.length;
         var coursesID       = [];
-        var studentToSave   = {};
+        var studentToSave   = new FormData();
         var studentID       = '';
 
-        // TODO: check all the inputs of this form
-        if (len != 0 && name != '' && email != '' && phone != ''){
+        if (id != 0 && len != 0 && name != '' && email != '' && phone != ''){
 
-            studentToSave.name      = name;
-            studentToSave.email     = email;
-            studentToSave.phone     = phone;
+            studentToSave.append('id', id);
+            studentToSave.append('name', name);
+            studentToSave.append('email', email);
+            studentToSave.append('phone', phone);
+            console.log('img ->', img[0]);
+            studentToSave.append('img', img[0]);
 
             for (var i = 0; i < len; i++){
                 // the id will ALWAYS be at the end after '-'
@@ -74,30 +89,41 @@ $(document).ready(function () {
                 coursesID.push(parseInt(course_id));
             }
 
-            studentToSave.courses   = coursesID;
+            studentToSave.append('courses', coursesID);
             console.log('passing - ', studentToSave);
-            /*var studentID = handleStudentToServer(studentToSave, function (id) {
-                if (id !== false){
-                    console.log('Student is successfuly created. His fresh id: ', id);
-                    return id;
-                }
-            });*/
             handleStudentToServer(studentToSave).then(function (id) {
                 console.log('received id: ', id);
                 studentID = id;
             });
             console.log('TEST: the received id: ', studentID);
-
         }
         else {
             console.log('Check your inputs AND You must select courses!');
         }
     }
 
+    // TODO: a variable that returns from the helper function is undefined, fix that (?)
+    function addCourseToStudent(student_id) {
+        console.log('Add course to student with ID: ', student_id, ' (type: ', typeof student_id, ')');
+        findStudentByID(student_id, function (student) {
+            console.log('student is: ', student, '\n\r (type: ', typeof student, ')');
+            if (typeof student === 'object')
+            {
+                mainViewCtrl('add-student', student);
+            }
+            else
+            {
+                console.log('Error: ', student);
+            }
+        });
+    }
 
+
+    window.findCourseByID           = findCourseByID;
     window.findStudentByID          = findStudentByID;
+    window.addCourseToStudent       = addCourseToStudent;
     window.processStudentData       = processStudentData;
-    window.showCoursesForSelection  = showCoursesForSelection;
+    window.processStudentImage      = processStudentImage;
 
 
 });

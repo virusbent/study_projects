@@ -24,15 +24,15 @@ interface IStudentService
     public function getAllStudents();
 
     /**
-     * @param   int          $id
-     * @return  Student|null
+     * @param int $id
+     * @return Student|null
      */
     public function getStudentByID($id);
 
     /**
      * Returns an array of Courses that THE Student is registered to.
-     * @param   int          $id
-     * @return  array|null
+     * @param int $id
+     * @return array|null
      */
     public function getStudentCourses($id);
 
@@ -56,4 +56,10 @@ interface IStudentService
      * @param Student $student
      */
     public function updateStudent(Student $student);
+
+    /**
+     * @param $id
+     * @param $newCourses
+     */
+    public function updateStudentCourses($id, $newCourses);
 }

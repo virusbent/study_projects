@@ -20,6 +20,7 @@ interface IImageService
     /**
      * @param string $imgPath
      * @param string $thumbPath
+     * @return int $i_id
      */
     public function saveImage($imgPath, $thumbPath);
 

@@ -22,14 +22,16 @@
                 <div class="row">
                     <h2 class="form-signin-heading text-center">Add Student</h2>
                     <div class="col-lg-6">
-                        <img src="http://placehold.it/200x200" alt="placeholdit">
+                        <img id="student-img" src="http://placehold.it/200x200" alt="placeholdit">
                     </div>
                     <br>
-                    <div class="input-group col-lg-6">
-                    <input type="text" id="new-student-name" class="form-control" value="" placeholder="Name" required autofocus>
-                    <input type="text" id="new-student-phone" class="form-control" value="" placeholder="Phone" required>
-                    <input type="email" id="new-student-email" class="form-control" value="" placeholder="eMail" required>
-                    <button class="btn btn-success" onclick="processStudentData(event)">Save the Student</button>
+                    <div class="input-group col-lg-6" id="student-info-inputs">
+                        <span value="" hidden></span>
+                        <input type="text" id="new-student-name" class="form-control" value="" placeholder="Name" autofocus>
+                        <input type="text" id="new-student-phone" class="form-control" value="" placeholder="Phone" >
+                        <input type="email" id="new-student-email" class="form-control" value="" placeholder="eMail" >
+                        <input type="file" name="student_img" class="btn" id="upload-img-student">
+                        <button class="btn btn-success" onclick="processStudentData(event)">Save the Student</button>
                     </div>
                     <br>
                 </div>
@@ -40,7 +42,25 @@
                         </ul>
                     </div>
                 </div>
+                {#<div class="col-lg-12"
+                     style="background-color: #ffad99;
+                                    opacity: .8;
+                                    margin-top: 1em;
+                                    padding: 1em;">
+                    <input type="file" name="student_img" class="btn" id="upload-img-student">
+                    <button form="upload-img" class="col-lg-12" type="submit" onclick="processStudentImage(event)">Upload</button>
+                </div>#}
             </form>
+            <form id="upload-img" enctype="multipart/form-data">
+
+            </form>
+
+            {# *TESTING #}
+            {#<form action="/uploadImageToAmazon" method="POST" id="form-img" enctype="multipart/form-data">
+                <input type="file" name="img" class="btn" id="upload-img-student">
+                <button type="submit" form="form-img">submit</button>
+            </form>#}
+
         </div>
     </div>
 </div>

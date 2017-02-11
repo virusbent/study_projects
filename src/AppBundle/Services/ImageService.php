@@ -9,6 +9,7 @@
 namespace AppBundle\Services;
 
 use AppBundle\Base\DAO\IImageService;
+use AppBundle\Base\DAO\IImageDAO;
 
 
 /**
@@ -38,10 +39,11 @@ class ImageService implements IImageService
     /**
      * @param string $imgPath
      * @param string $thumbPath
+     * @return int $i_id
      */
     public function saveImage($imgPath, $thumbPath)
     {
-        $this->imgDAO->save($imgPath, $thumbPath);
+        return $this->imgDAO->save($imgPath, $thumbPath);
     }
 
     /**

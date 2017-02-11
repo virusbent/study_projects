@@ -112,4 +112,15 @@ class StudentService implements IStudentService
             $this->coursesOfStudentDAO->saveCoursesOfStudent($id, $course_id);
         }
     }
+
+    /**
+     * @param $id
+     * @param $newCourses
+     */
+    public function updateStudentCourses($id, $newCourses)
+    {
+        $oldCourses     = $this->coursesOfStudentDAO->getAllCoursesOfStudent($id);
+        $coursesToSave  = array_diff($newCourses, $oldCourses);
+        $this->coursesOfStudentDAO->saveCoursesOfStudent($id, $newCourses);
+    }
 }

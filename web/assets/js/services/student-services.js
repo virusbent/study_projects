@@ -3,24 +3,27 @@
  */
 (function () {
     function handleStudentToServer(student){
-        return new Promise(function (fulfill, reject) {
+        console.log('STUDENT -> ', student);
+        /*return new Promise(function (fulfill, reject) {*/
             console.log('Service - handleStudentToServer: ', student);
-            $.ajax({
-                type    : "POST",
-                url     : "/saveStudent",
-                headers : {"Content-type":"application/x-www-form-urlencoded"},
-                data    : student
+            return $.ajax({
+                method      : 'POST',
+                url         : '/saveStudent/',
+                contentType : false,
+                /*headers : {"Content-type":"multipart/form-data"},*/
+                data        : student,
+                processData : false
             })
                 .then(function (response) {
-                    console.log('Promise response: ', response);
+                    console.log('*handleStudentToServer* - Promise response: ', response);
                     if(response != false)
-                        fulfill(response);
+                        return response;
                     else
-                        reject(response);
+                        throw response;
                 })
                 .catch(function (err) {
                     console.error(err);
-                    reject(err);
+                    throw err;
                 });
                 /*.done(function (response, textStatus) {
                     if (textStatus === 'success'){
@@ -33,9 +36,35 @@
                         textStatus, errorThrown);
                     passStudentId(false);
                 }) */
-        });
+    }
+
+
+    // TODO: Depricated ???
+    function handleStudentImage(image) {
+        return new Promise(function (fulfill, reject) {
+            $.ajax({
+                method      : "POST",
+                url         : "/uploadImageToAmazon",
+                //headers     : {"Content-type":"multipart/form-data"},
+                mimeType    : "multipart/form-data",
+                contentType : false,
+                processDate : false,
+                cashe       : false,
+                image       : image
+            }).then(function (response) {
+                console.log('*handleStudentImage* - Promise response: ', response);
+                if(response != false)
+                    fulfill(response);
+                else
+                    reject(response);
+            }).catch(function (err) {
+                console.error("!ERROR: ", err);
+                reject(err);
+            });
+        })
     }
 
 
     window.handleStudentToServer = handleStudentToServer;
+    window.handleStudentImage    = handleStudentImage;
 })();

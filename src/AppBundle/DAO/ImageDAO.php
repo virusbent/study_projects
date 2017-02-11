@@ -39,12 +39,15 @@ class ImageDAO implements IImageDAO
 
     /**
      * @param string $imgPath
+     * @return int $i_id
      */
     public function save($imgPath, $thumbPath)
     {
         $save = $this->connector->insert();
         $save->into(self::TABLE, ['i_path', 'i_thumb'])
                 ->values($imgPath, $thumbPath)->execute();
+        $i_id = $this->connector->getConnector()->controller()->lastId();
+        return $i_id;
     }
 
     /**
@@ -60,7 +63,7 @@ class ImageDAO implements IImageDAO
 
     /**
      * @param int|string $id
-     * @param string     $path
+     * @param string $path
      */
     public function update($id, $path, $thumbPath)
     {

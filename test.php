@@ -34,9 +34,17 @@ $newStudent->fromArray([
     's_phone'     => '0528864232'
 ]);
 $studentsService    = Scope::skeleton()->get(IStudentService::class);
-$newStudentID       = $studentsService->saveStudent($newStudent);
-var_dump($newStudentID);
-die;
+//$newStudentID       = $studentsService->saveStudent($newStudent);
+//var_dump($newStudentID);die;
+
+// TEST - Update student with new courses
+/*$studentToEdit = $studentsService->getStudentByID(3);
+var_dump($studentToEdit);die;*/
+
+$response = $studentsService->getAllStudents();
+var_dump($response);die;
+
+
 
 
 //works
@@ -91,7 +99,6 @@ $count   = $service->getNumberOfStudents();
 $student = $service->getStudentByID(3);
 var_dump($student);*/
 
-// TODO: check if image services are working
 /*$imgService = Scope::skeleton()->get(IImageService::class);
 $img        = $imgService->getImageByID(5);
 

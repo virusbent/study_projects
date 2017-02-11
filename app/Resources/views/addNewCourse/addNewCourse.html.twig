@@ -16,16 +16,22 @@
                     </button>
                 </div>
             </div>
-            <form class="form-signin">
+            <form class="form-signin" id="course-info-inputs">
                 <h2 class="form-signin-heading text-center">Add Course</h2>
                 <br>
-                <label for="name" class="sr-only">Course Name</label>
-                <input type="text" id="name" class="form-control" placeholder="Course Name" required autofocus>
-                <label for="desc" class="sr-only">Description</label>
-                <input type="text" id="desc" class="form-control" placeholder="Description" required>
+                <span hidden></span>
+                <input type="text" id="new-course-name" class="form-control" placeholder="Course Name" required autofocus>
+                <input type="text" id="new-course-desc" class="form-control" placeholder="Description" required>
                 <br>
                 <div>
-                    <img src="http://placehold.it/250x250" alt="placeholdit">
+                    <img id="course-img" src="http://placehold.it/250x250" alt="placeholdit">
+                </div>
+                <br>
+                <div class="row">
+                    <div id="course-students" class="input-group col-lg-4 col-lg-offset-1">
+                        <ul class="list-group" id="list-of-students-to-add">
+                        </ul>
+                    </div>
                 </div>
             </form>
         </div>

@@ -16,10 +16,6 @@ $(document).ready(function () {
 
     // *** SELECTORS **************
 
-    var studentForm     = $("#add-new-student");
-    var studentDetails  = $("#details-student");
-    var courseForm      = $("#add-new-course");
-
 
 
     // *** EVENTS ***************
@@ -56,186 +52,19 @@ $(document).ready(function () {
                 // set to global var of students
                 allStudents = students;
                 // push the data to the list of students on the view
-                populateStudentsList(students);
+                populateStudentList(students);
             });
 
         // request to DB for all registered courses
         getAllCourses()
             .then(function (courses) {
+                // set to global var of courses
                 allCourses = courses;
+                // push the data to the list of courses on the view
+                console.log('sending to populate: ', courses);
+                populateCourseList(courses);
             })
     }
-
-
-
-
-    // will take an array of students (pulled from server)
-    // and create <li> item for each one of the students in the array.
-    // structure :
-    /* <li class="list-group-item">
-         <div class="row">
-            <img  class="col-lg-4" src="url to student thumbnail"/>
-            <span class="col-lg-8"> student name  </span>
-            <span class="col-lg-8"> student phone </span>
-         </div>
-       </li> */
-    function populateStudentsList(students) {
-        var studentList = $("#student-list");
-        console.log('populateStudentsList --------> ', students);
-        $.each(students, function (i) {
-            var studentUnit = $('<li/>')
-                .attr('id', students[i].s_ID)
-                .addClass('list-group-item')
-                .appendTo(studentList)
-                .on('click', function (event) {
-                    // show student details on the main view.
-                    //mainViewCtrl('show-student', students[i].s_ID);
-                    mainViewCtrl('show-student', students[i]);
-                });
-
-            var row = $('<div/>')
-                .addClass('row')
-                .appendTo(studentUnit);
-
-            // students[i].s_img[2] for student thumbnail. (students[s_img][thumb]).
-            var thumb = $('<img/>')
-                .addClass('col-lg-4')
-                .attr('src', students[i].s_img[2])
-                .appendTo(row);
-
-            var name = $('<span/>')
-                .text(students[i].s_name)
-                .addClass('col-lg-8')
-                .appendTo(row);
-
-            var phone = $('<span/>')
-                .text(students[i].s_phone)
-                .addClass('col-lg-8')
-                .appendTo(row);
-        })
-    }
-
-    // manipulating the main view by changing the visibility on
-    // add-student/course, student-details
-    // only one visible at a time.
-    function mainViewCtrl(viewToShow, student) {
-        //console.log('> clicked on: ', viewToShow);
-        switch(viewToShow){
-            // if course+ was clicked
-            case 'add-course':
-                $('#count').hide();
-                studentDetails.addClass("hidden");
-                studentForm.addClass("hidden");
-                // show course add form
-                courseForm.removeClass("hidden");
-                break;
-            // if student+ was clicked
-            case 'add-student':
-                $('#count').hide();
-                studentDetails.addClass("hidden");
-                courseForm.addClass("hidden");
-                // show student add form
-                studentForm.removeClass("hidden");
-                // TODO: show all available courses in the add-new-student view
-                showCoursesForSelection();
-                break;
-            // if clicked on the specific student
-            case 'show-student':
-                $('#count').hide();
-                studentForm.addClass("hidden");
-                courseForm.addClass("hidden");
-                // show details view
-                studentDetails.removeClass("hidden");
-                if (student.s_ID !== null){
-                    showStudentDetails(student);
-                }
-                break;
-        }
-    }
-
-    // walk through allStudents array and returns student with requested id.
-    /*function findStudentByID(id) {
-        allStudents.map(function (student) {
-            if(student.s_ID === id){
-                return student;
-            }
-            else {
-                return null;
-            }
-        })
-    }*/
-
-    // will receive student id and will push his data to the view.
-    function showStudentDetails(studentToShow) {
-        // needed selectors
-        var img         = $("#student-img");
-        var name        = $("#student-name");
-        var phone       = $("#student-phone");
-        var email       = $("#student-email");
-        var courseList  = $("#this-student-courses");
-
-        // first clean the previous presented courses, if was presented
-        courseList.empty();
-
-        //pushing data to student's containers
-        //studentToShow.s_img[1] student's big image
-        img.attr('src', studentToShow.s_img[1]);
-        name.text(studentToShow.s_name);
-        phone.text(studentToShow.s_phone);
-        email.text(studentToShow.s_email);
-
-        if (studentToShow.s_courses !== null)
-        {
-            var courses = studentToShow.s_courses;
-            courses.map(function (course) {
-                var courseUnit = $('<li/>')
-                    .text(course.c_name)
-                    .attr('id', course.c_ID)
-                    .addClass('list-group-item')
-                    .appendTo(courseList);
-            });
-        }
-        else
-        {
-            var courseUnit = $('<li/>')
-                .appendTo(courseList)
-                .addClass('list-group-item')
-                .text('Not assigned to any course')
-                .append(
-                    $('<button/>')
-                        .addClass('btn btn-primary btn-block')
-                        .attr({type:"button", id : studentToShow.s_ID})
-                        .text('Add Course')
-                        .on('click', function (event) {
-                            addCourseToStudent(event.target.id);
-                        })
-                );
-        }
-
-
-    }
-
-    // TODO: a variable that returns from the helper function is undefined, fix that
-    function addCourseToStudent(student_id) {
-        console.log('Add course to student with ID: ', student_id);
-        findStudentByID(student_id, function (student) {
-            console.log('student is: ', student);
-            if (typeof student != 'string')
-            {
-                mainViewCtrl('add-course');
-            }
-            else
-            {
-                console.log('Error: ', student);
-            }
-        });
-        /*if (student !== null && !undefined)
-            console.log('student -> ', student);
-            //mainViewCtrl('add-student');
-        else
-            console.log('student is null');*/
-    }
-
 
     // *** SERVICES *****************
 
