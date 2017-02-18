@@ -11,6 +11,7 @@ namespace AppBundle\Services;
 use AppBundle\Base\DAO\ICourses_StudentsDAO;
 use AppBundle\Base\DAO\IStudentDAO;
 use AppBundle\Base\DAO\ICourseDAO;
+use AppBundle\Objects\Course;
 use AppBundle\Scope;
 use AppBundle\Base\DAO\IStudentService;
 use AppBundle\Objects\Student;
@@ -108,7 +109,7 @@ class StudentService implements IStudentService
      */
     public function saveStudentCourses($id, $courses)
     {
-        foreach ($courses as $course_id){
+        foreach ($courses as $key => $course_id){
             $this->coursesOfStudentDAO->saveCoursesOfStudent($id, $course_id);
         }
     }
@@ -120,6 +121,7 @@ class StudentService implements IStudentService
     public function updateStudentCourses($id, $newCourses)
     {
         $oldCourses     = $this->coursesOfStudentDAO->getAllCoursesOfStudent($id);
+        $oldCourses     = Course::allToArray($oldCourses);
         $coursesToSave  = array_diff($newCourses, $oldCourses);
         $this->coursesOfStudentDAO->saveCoursesOfStudent($id, $newCourses);
     }

@@ -56,13 +56,12 @@ class Courses_StudentsDAO implements ICourses_StudentsDAO
      * @param int   $student_id
      * @param array $courses
      */
-    public function saveCoursesOfStudent($student_id, $courses)
+    public function saveCoursesOfStudent($student_id, $course_id)
     {
-        $save = $this->connector->insert();
-        foreach ($courses as $course){
-            $save->into(self::TABLE, 'cs_course_ID', 'cs_student_ID')
-                ->values($student_id, $course)->execute();
-        };
+        $row    = array($course_id, $student_id);
+        $save   = $this->connector->insert();
+        $save->into(self::TABLE, ['cs_course_ID', 'cs_student_ID'])
+             ->values($row)->execute();
     }
 
     /**

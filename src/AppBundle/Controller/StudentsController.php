@@ -103,6 +103,7 @@ class StudentsController extends Controller
      */
     public function uploadImageToAmazon(Request $request)
     {
+        /* **** DEPRECATED **** */
         var_dump($_FILES);die;
         //TODO: put key and secret. Test it with ListObjects.
         // @see http://docs.aws.amazon.com/aws-sdk-php/v2/api/class-Aws.S3.S3Client.html
@@ -122,35 +123,50 @@ class StudentsController extends Controller
      */
     public function saveStudent(Request $request)
     {
-
-        var_dump($_POST);
-        var_dump($_FILES['img']['tmp_name']);
-        die;
-
+        //var_dump($_FILES);die;
         $student_id     = $_POST['id'];
-        $studentCourses = $_POST['courses'];
-
-        // Array that contains :
-        // In case of NEW student: [0]=>img path  |  [1]=>thumbnail
-        // In case of student that BEING UPDATED: [0]=>img id  |  [1]=>img path  |  [2]=>thumbnail
+        $studentCourses = explode(",", $_POST['courses']);
+        // contains file path
         $studentImg     = $_FILES['img']['tmp_name'];
+
+        /* --------- amazon s3 config --------- */
+        $s3 = new S3Client([
+            'credentials' =>
+            [
+                'key'     => 'AKIAIKFHT4D3YFILN5LQ',
+                'secret'  => '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'
+            ],
+            'region'  => 'us-east-1',
+            'version' => 'latest'
+        ]);
+        $key = uniqid("", true). $_FILES['img']['name'];
 
         $studentLight   = new Student();
 
         // when student comes WITH id, use studentsService->updateStudent
         // when NOT, use studentsService->saveStudent
         // TODO: finish the 'save/update images' of the student
-        if (!$student_id || $student_id === "NaN")
+        if (!isset($student_id) || $student_id === "NaN" || empty($student_id))
         {
-            // save img
-            $img_id         = $this->imgsService->saveImage($studentImg[0], $studentImg[1]);
+            //s3 upload image to amazon
+            $doUploadImage = $s3->putObject([
+                'Bucket'     => 'evg-college-app',
+                'Key'        => $key,
+                'SourceFile' => $studentImg
+            ]);
+            /* Upload img and return url of the img */
+            $imgUrl = $doUploadImage["ObjectURL"];
+            /* Create url for resized img */
+            $imgUrlThumb = str_replace('evg-college-app/', 'evg-college-appresized/resized-', $imgUrl);
+            /* Save img to DB return id */
+            $savedImgId = $this->imgsService->saveImage($imgUrl, $imgUrlThumb);
 
             // transform to Light Object
             $studentLight->fromArray([
-                's_name'    => $studentData['name'],
-                's_email'   => $studentData['email'],
-                's_phone'   => $studentData['phone'],
-                's_img'     => $img_id
+                's_name'    => $_POST['name'],
+                's_email'   => $_POST['email'],
+                's_phone'   => $_POST['phone'],
+                's_img'     => $savedImgId
             ]);
 
             // save the student
@@ -160,14 +176,26 @@ class StudentsController extends Controller
         }
         else
         {
-            $img_id         = $this->imgsService->updateImage($studentImg);
-            $studentLight->fromArray([
-                's_ID'      => $studentData['id'],
-                's_name'    => $studentData['name'],
-                's_email'   => $studentData['email'],
-                's_phone'   => $studentData['phone'],
-                's_img'     => $img_id
-            ]);
+            if (isset($studentImg)){
+                $img_id = $this->imgsService->updateImage($studentImg);
+                $studentLight->fromArray([
+                    's_ID'      => $_POST['id'],
+                    's_name'    => $_POST['name'],
+                    's_email'   => $_POST['email'],
+                    's_phone'   => $_POST['phone'],
+                    's_img'     => $img_id
+                ]);
+            }
+            else{
+                $student = $this->studentsService->getStudentByID($student_id);
+                $studentLight->fromArray([
+                    's_ID'      => $_POST['id'],
+                    's_name'    => $_POST['name'],
+                    's_email'   => $_POST['email'],
+                    's_phone'   => $_POST['phone'],
+                    's_img'     => $student->s_img
+                ]);
+            }
             $student_id     = $studentLight->s_ID;
             $this->studentsService->updateStudent($studentLight);
             $this->studentsService->updateStudentCourses($student_id, $studentCourses);

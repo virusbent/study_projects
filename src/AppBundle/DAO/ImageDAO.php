@@ -43,10 +43,11 @@ class ImageDAO implements IImageDAO
      */
     public function save($imgPath, $thumbPath)
     {
+        $imgData = array($imgPath, $thumbPath);
         $save = $this->connector->insert();
         $save->into(self::TABLE, ['i_path', 'i_thumb'])
-                ->values($imgPath, $thumbPath)->execute();
-        $i_id = $this->connector->getConnector()->controller()->lastId();
+                ->values($imgData)->execute();
+        $i_id = $this->connector->controller()->lastId();
         return $i_id;
     }
 
