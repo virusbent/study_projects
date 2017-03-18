@@ -12,6 +12,7 @@ use AppBundle\Base\DAO\ICourseDAO;
 use AppBundle\Base\DAO\ICourses_StudentsDAO;
 use AppBundle\Base\DAO\ICourseService;
 use AppBundle\Objects\Course;
+use AppBundle\Objects\Student;
 use AppBundle\Scope;
 
 /**
@@ -63,6 +64,17 @@ class CourseService implements ICourseService
     public function save(Course $course)
     {
         $this->courseDAO->save($course);
+        return $course->c_ID;
+    }
+
+    /**
+     * $students is an array of student ids.
+     * @param int   $id
+     * @param array $students
+     */
+    public function saveCourseStudents($id, $students)
+    {
+        $this->studentsOfCourseDAO->saveStudentsOfCourse($id, $students);
     }
 
     /**
@@ -71,6 +83,25 @@ class CourseService implements ICourseService
     public function update(Course $course)
     {
         $this->courseDAO->update($course);
+    }
+
+    /**
+     * @param $id
+     * @param $newStudents
+     */
+    public function updateCourseStudents($id, $newStudents)
+    {
+        $oldStudents     = $this->studentsOfCourseDAO->getAllCoursesOfStudent($id);
+        //$oldStudents     = Student::allToArray($oldStudents);
+        $studentsToSave  = array_diff($newStudents, $oldStudents);
+        $studentsToDelete = array_diff($oldStudents, $newStudents);
+
+        if ($studentsToSave)
+            $this->studentsOfCourseDAO->saveStudentsOfCourse($id, $studentsToSave);
+        if ($studentsToDelete){
+            // deleteCoursesOfStudent = deleteStudentsOfCourse      !!! same function !!!
+            $this->studentsOfCourseDAO->deleteCoursesOfStudent($id, $studentsToDelete);
+        }
     }
 
     /**

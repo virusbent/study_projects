@@ -41,6 +41,7 @@
 
     // TODO: Depricated ???
     function handleStudentImage(image) {
+        console.log("!!! !!! NEEDS TO BE DEPRECATED !!! !!! \n\r!!! !!! handleStudentImage !!! !!! ");
         return new Promise(function (fulfill, reject) {
             $.ajax({
                 method      : "POST",

@@ -16,8 +16,9 @@
     var studentDetails  = $("#details-student");
     var courseDetails   = $("#details-course");
     var courseForm      = $("#add-new-course");
-    // in case of edit
-    var id      = $("#quick-edit").parent().find("span:hidden");
+    // in case of edit ID is present
+    //var id              = $("#quick-edit").parent().find("span:hidden");
+    var id              = $("#db-student-id");
 
     // manipulating the main view by changing the visibility on
     // add-student/course, student-details
@@ -25,17 +26,17 @@
     // if receives second param then it's edit mode.
     function mainViewCtrl(viewToShow, data) {
         switch(viewToShow){
-            // if course+ was clicked
+            // if course+/edit was clicked
             case 'add-course':
                 $('#count').hide();
+                emptyDetails("course");
                 studentDetails.addClass("hidden");
                 studentForm.addClass("hidden");
                 courseDetails.addClass("hidden");
                 // show course add form
                 courseForm.removeClass("hidden");
-
-                /* TEST */
                 showListForSelection('course');
+
                 if (typeof data === 'object' && data != null){
                     fillDetails(data);
                 }
@@ -43,17 +44,7 @@
             // if student+/edit was clicked
             case 'add-student':
                 $('#count').hide();
-
-                /* Random String */
-                //var random_string = Array(32).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 32);
-
-
-                /* TEST - clean the inputs when moving from edit to new */
-                // not working
-                $('#new-student-name').empty();
-                $('#new-student-phone').empty();
-                $('#new-student-email').empty();
-
+                emptyDetails("student");
                 studentDetails.addClass("hidden");
                 courseForm.addClass("hidden");
                 courseDetails.addClass("hidden");
@@ -61,6 +52,7 @@
                 studentForm.removeClass("hidden");
                 // show all available courses for new student
                 showListForSelection('student');
+
                 if (typeof data === 'object' && data != null){
                     fillDetails(data);
                 }
@@ -73,6 +65,7 @@
                 courseDetails.addClass("hidden");
                 // show details view
                 studentDetails.removeClass("hidden");
+
                 if (data.s_ID !== null || data.s_ID !== false){
                     showStudentDetails(data);
                 }
@@ -85,6 +78,7 @@
                 studentDetails.addClass("hidden");
                 // show details view
                 courseDetails.removeClass("hidden");
+
                 if (data.c_ID !== null || data.c_ID !== false){
                     showCourseDetails(data);
                 }
@@ -96,7 +90,6 @@
     function showListForSelection(list_type) {
         if(list_type === 'student'){
             var courseList = $('#list-of-courses-to-add');
-            courseList.empty();
             allCourses.forEach(function (course) {
                 var item = $('<li/>')
                     .attr('id', 'course-item-' + course.c_ID)
@@ -110,7 +103,6 @@
         }
         else if(list_type === 'course'){
             var studentList = $('#list-of-students-to-add');
-            studentList.empty();
             allStudents.forEach(function (student) {
                 var item = $('<li/>')
                     .attr('id', 'student-item-' + student.s_ID)
@@ -181,6 +173,7 @@
         var name            = $("#course-name");
         var desc            = $("#course-description");
         var studentList     = $("#this-course-students");
+        var id              = $("#db-course-id");
 
         // first clean the previous presented courses, if was presented
         studentList.empty();
@@ -285,7 +278,6 @@
     }
 
     function editThisCourse() {
-        console.log('> NOTE! "edit course" reached, "find course by id" function is needed to complete the action!');
         findCourseByID(id.text(), function (course) {
             mainViewCtrl('add-course', course);
         });
@@ -294,6 +286,26 @@
 
 
     /* INNER METHODS */
+
+    function emptyDetails(type) {
+        if(type === "student"){
+            $('#db-student-id').text("");
+            $('#list-of-courses-to-add').empty();
+            $('#add-student-img').attr("src", "http://placehold.it/250x250");
+
+            if($('#new-student-name').val() !== "")     $('#new-student-name').val("");
+            if($('#new-student-phone').val() !== "")    $('#new-student-phone').val("");
+            if($('#new-student-email').val() !== "")    $('#new-student-email').val("");
+        }
+        else if(type === "course"){
+            $('#db-course-id').text("");
+            $('#list-of-students-to-add').empty();
+            $('#add-course-img').attr("src", "http://placehold.it/250x250");
+
+            if($("#new-course-name").val() !== "")      $("#new-course-name").val("");
+            if($("#new-course-desc").val() !== "")      $("#new-course-desc").val("");
+        }
+    }
 
     // Fill inputs with details of chosen Student/Course to be edited
     function fillDetails(details){
@@ -305,7 +317,7 @@
                 $('#new-student-name').val(details.s_name);
                 $('#new-student-phone').val(details.s_phone);
                 $('#new-student-email').val(details.s_email);
-                $('#student-img').attr('src', details.s_img[1]);
+                $('#add-student-img').attr('src', details.s_img[1]);
                 var courseListNotActive = $("#list-of-courses-to-add").children();
                 details.s_courses.map(function (course) {
                     courseListNotActive.each(function () {
@@ -321,7 +333,7 @@
                 $('#course-info-inputs').find('span:hidden').val(details.c_ID);
                 $('#new-course-name').val(details.c_name);
                 $('#new-course-desc').val(details.c_description);
-                $('#course-img').attr('src', details.c_img[1]);
+                $('#add-course-img').attr("src", details.c_img[1]);
                 var studentListNotActive = $("#list-of-students-to-add").children();
                 details.c_students.map(function (student) {
                     studentListNotActive.each(function () {
@@ -338,6 +350,11 @@
                 break;
         }
     }
+
+
+    /* Random String */
+    //var random_string = Array(32).join((Math.random().toString(36)+'00000000000000000').slice(2, 18)).slice(0, 32);
+
 
     window.mainViewCtrl             = mainViewCtrl;
     window.editThisStudent          = editThisStudent;

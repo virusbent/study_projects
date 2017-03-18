@@ -9,7 +9,6 @@
 namespace AppBundle\DAO;
 use AppBundle\Base\DAO\ICourses_StudentsDAO;
 use AppBundle\Scope;
-//use Doctrine\DBAL\Schema\Table; // <- delete this
 
 class Courses_StudentsDAO implements ICourses_StudentsDAO
 {
@@ -53,23 +52,39 @@ class Courses_StudentsDAO implements ICourses_StudentsDAO
     }
 
     /**
-     * @param int   $student_id
-     * @param array $courses
+     * @param int $student_id
+     * @param int $course_id
      */
-    public function saveCoursesOfStudent($student_id, $course_id)
+    public function saveCoursesOfStudent($student_id, $course_ids)
     {
-        $row    = array($course_id, $student_id);
-        $save   = $this->connector->insert();
-        $save->into(self::TABLE, ['cs_course_ID', 'cs_student_ID'])
-             ->values($row)->execute();
+        foreach ($course_ids as $course_id){
+            $row    = array($course_id, $student_id);
+            $save   = $this->connector->insert();
+            $save->into(self::TABLE, ['cs_course_ID', 'cs_student_ID'])
+                ->values($row)->execute();
+        }
     }
 
     /**
-     * @param int   $courses_id
-     * @param array $students
+     * @param int $course_id
+     * @param int $student_id
      */
-    public function saveStudentsOfCourse($courses_id, $students)
+    public function saveStudentsOfCourse($course_id, $student_ids)
     {
-        // TODO: Implement saveStudentsOfCourse() method.
+        foreach ($student_ids as $student_id){
+            $row    = array($course_id, $student_id);
+            $save   = $this->connector->insert();
+            $save->into(self::TABLE, ['cs_course_ID', 'cs_student_ID'])->ignore()
+                ->values($row)->execute();
+        }
+    }
+
+    /**
+     * @param       $student_id
+     * @param array $course_ids
+     */
+    public function deleteCoursesOfStudent($student_id, array $course_ids)
+    {
+        $this->connector->delete()->from(self::TABLE)->byField("cs_student_ID", $student_id)->byField("cs_course_ID", $course_ids)->executeDml();
     }
 }

@@ -22,13 +22,12 @@ use Aws\S3\S3Client;
 class StudentsController extends Controller
 {
     private $newStudent;
-
     private $studentsService;
     private $coursesService;
     private $courses_students;
+
     /** @var IImageService */
     private $imgsService;
-    private $responseWithImgPath;
 
     public function __construct()
     {
@@ -50,28 +49,6 @@ class StudentsController extends Controller
     }
 
     /**
-     * IMPORTANT! - may be replaced
-     * @Route("/getThisStudentCourses/{studentId}", name="getStudentCourses")
-     */
-    public function getStudentCourses($studentId)
-    {
-        $coursesLight   = array();
-        $courses        = array();
-
-        $coursesIdsOfThisStudent = $this->studentsService->getStudentCourses($studentId);
-
-        foreach ($coursesIdsOfThisStudent as $courseId){
-            $singleCourseLight  = $this->coursesService->getCourseByID($courseId);
-            array_push($coursesLight, $singleCourseLight);
-        }
-
-        $courses    = Course::allToArray($coursesLight);
-        return new JsonResponse($courses);
-
-    }
-
-    /**
-     * TESTING - may replace getStudentCourses
      * @Route("/getStudentImgsAndCourses/{studentId}", name="getStudentInfo")
      */
     public function getStudentImgsAndCourses($studentId)
@@ -86,36 +63,15 @@ class StudentsController extends Controller
             $singleCourseLight  = $this->coursesService->getCourseByID($courseId);
             array_push($coursesLight, $singleCourseLight);
         }
+
         $studentImgsId  = $this->studentsService->getStudentByID($studentId)->s_img;
         $imgs           = $this->imgsService->getImageByID($studentImgsId);
         $courses        = Course::allToArray($coursesLight);
 
         array_push($response, $imgs, $courses);
-        /*var_dump($response);
-        die;*/
+
         return new JsonResponse($response);
 
-    }
-
-
-    /**
-     * @Route("/uploadImageToAmazon/", name="uploadImageToAmazon")
-     */
-    public function uploadImageToAmazon(Request $request)
-    {
-        /* **** DEPRECATED **** */
-        var_dump($_FILES);die;
-        //TODO: put key and secret. Test it with ListObjects.
-        // @see http://docs.aws.amazon.com/aws-sdk-php/v2/api/class-Aws.S3.S3Client.html
-        /*$s3 = new S3Client([
-            'key'     => 'AKIAIKFHT4D3YFILN5LQ',
-            'secret'  => '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',
-            'region'  => 'Global'
-        ]);*/
-        $test = $_FILES['student_img']['tmp_name'];
-        //$path = $s3->listObjects($test);
-        print_r(is_uploaded_file($test));die;
-        return $response($path);
     }
 
     /**
@@ -123,11 +79,19 @@ class StudentsController extends Controller
      */
     public function saveStudent(Request $request)
     {
-        //var_dump($_FILES);die;
+        //var_dump($_POST);die;
         $student_id     = $_POST['id'];
         $studentCourses = explode(",", $_POST['courses']);
+
         // contains file path
-        $studentImg     = $_FILES['img']['tmp_name'];
+        if(isset($_FILES['img'])){
+            $studentImg     = $_FILES['img']['tmp_name'];
+        }
+        /*else{
+            $curr_student   = $this->studentsService->getStudentByID($student_id);
+            $studentImg     = $this->imgsService->getImageByID($curr_student->s_img);
+        }*/
+
 
         /* --------- amazon s3 config --------- */
         $s3 = new S3Client([
@@ -139,13 +103,13 @@ class StudentsController extends Controller
             'region'  => 'us-east-1',
             'version' => 'latest'
         ]);
-        $key = uniqid("", true). $_FILES['img']['name'];
+        if(isset($_FILES['img']['name']))
+            $key = uniqid("", true). $_FILES['img']['name'];
 
         $studentLight   = new Student();
 
         // when student comes WITH id, use studentsService->updateStudent
         // when NOT, use studentsService->saveStudent
-        // TODO: finish the 'save/update images' of the student
         if (!isset($student_id) || $student_id === "NaN" || empty($student_id))
         {
             //s3 upload image to amazon
@@ -209,5 +173,49 @@ class StudentsController extends Controller
         return $response;
     }
 
+
+    /* ************************************ */
+    /* ***********______________*********** */
+    /* ***********| DEPRECATED |*********** */
+    /* ************************************ */
+
+    /**
+     * @Route("/uploadImageToAmazon/", name="uploadImageToAmazon")
+     */
+//    public function uploadImageToAmazon(Request $request)
+//    {
+//        var_dump($_FILES);die;
+//        // @see http://docs.aws.amazon.com/aws-sdk-php/v2/api/class-Aws.S3.S3Client.html
+//        /*$s3 = new S3Client([
+//            'key'     => 'AKIAIKFHT4D3YFILN5LQ',
+//            'secret'  => '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',
+//            'region'  => 'Global'
+//        ]);*/
+//        $test = $_FILES['student_img']['tmp_name'];
+//        //$path = $s3->listObjects($test);
+//        print_r(is_uploaded_file($test));die;
+//        return $response($path);
+//    }
+
+    /**
+     * @Route("/getThisStudentCourses/{studentId}", name="getStudentCourses")
+     */
+//    public function getStudentCourses($studentId)
+//    {
+//        $coursesLight   = array();
+//        $courses        = array();
+//
+//        $coursesIdsOfThisStudent = $this->studentsService->getStudentCourses($studentId);
+//
+//        foreach ($coursesIdsOfThisStudent as $courseId){
+//            $singleCourseLight  = $this->coursesService->getCourseByID($courseId);
+//            array_push($coursesLight, $singleCourseLight);
+//        }
+//
+//        $courses    = Course::allToArray($coursesLight);
+//
+//        return new JsonResponse($courses);
+//
+//    }
 
 }

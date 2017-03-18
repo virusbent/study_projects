@@ -121,8 +121,12 @@ class StudentService implements IStudentService
     public function updateStudentCourses($id, $newCourses)
     {
         $oldCourses     = $this->coursesOfStudentDAO->getAllCoursesOfStudent($id);
-        $oldCourses     = Course::allToArray($oldCourses);
+        //$oldCourses     = Course::allToArray($oldCourses);
         $coursesToSave  = array_diff($newCourses, $oldCourses);
-        $this->coursesOfStudentDAO->saveCoursesOfStudent($id, $newCourses);
+        $coursesToDelete = array_diff($oldCourses, $newCourses);
+        if($coursesToDelete)
+            $this->coursesOfStudentDAO->deleteCoursesOfStudent($id, $coursesToDelete);
+        if($coursesToSave)
+            $this->coursesOfStudentDAO->saveCoursesOfStudent($id, $coursesToSave);
     }
 }

@@ -7,7 +7,7 @@ $(document).ready(function () {
     function findStudentByID(id, passResult) {
         var foundStudent;
         allStudents.map(function (student) {
-            if(student.s_ID === id){
+            if(student["s_ID"] === id){
                 console.log('student is found: ', student);
                 foundStudent = student;
             }
@@ -55,35 +55,51 @@ $(document).ready(function () {
         })
     }
 
+    function processCourseData(event) {
+        event.preventDefault();
+        var id              = $('#db-course-id').text();
 
+        var courseID       = '';
+
+        form = createFormData("course");
+
+            console.log('passing - ', form);
+            handleCourseToServer(form).then(function (id) {
+                console.log('received id: ', id);
+                courseID = id;
+                return id;
+            });
+    }
 
 
     function processStudentData(event) {
         event.preventDefault();
         // * selectors *
         var selectedCourses = $('#list-of-courses-to-add').children().filter('.active');
-        var id              = parseInt($('#student-info-inputs').find('span:hidden').val());
+        //var id              = parseInt($('#student-info-inputs').find('span:hidden').val());
+        var id              = $('#db-student-id').text();
         var name            = $('#new-student-name').val();
         var email           = $('#new-student-email').val();
         var phone           = $('#new-student-phone').val();
         var img             = $('#upload-img-student')[0].files;
 
-        // * variables *
-        var len             = selectedCourses.length;
+        //createFormData("student");
+
+        /* variables */
         var coursesID       = [];
         var studentToSave   = new FormData();
         var studentID       = '';
+        var amountOfCourses = selectedCourses.length;
 
-        if (id != 0 && len != 0 && name != '' && email != '' && phone != ''){
+        if (id != 0 && amountOfCourses != 0 && name != '' && email != '' && phone != ''){
 
             studentToSave.append('id', id);
             studentToSave.append('name', name);
             studentToSave.append('email', email);
             studentToSave.append('phone', phone);
-            console.log('img ->', img[0]);
             studentToSave.append('img', img[0]);
 
-            for (var i = 0; i < len; i++){
+            for (var i = 0; i < amountOfCourses; i++){
                 // the id will ALWAYS be at the end after '-'
                 var course_id = selectedCourses[i].id.split('-').pop();
                 coursesID.push(parseInt(course_id));
@@ -118,11 +134,84 @@ $(document).ready(function () {
         });
     }
 
+    function createFormData(type) {
+        var form        = new FormData();
+        var listOfIds   = [];
+
+        if(type === "student"){
+            // create an object/(?array?) of selectors and return it
+            selectors = {
+                type            : type,
+                list            : $('#list-of-courses-to-add').children().filter('.active'),
+                //id              : parseInt($('#student-info-inputs').find('span:hidden').val()),
+                id              : $('#db-student-id').text(),
+                name            : $('#new-student-name').val(),
+                email           : $('#new-student-email').val(),
+                phone           : $('#new-student-phone').val(),
+                img             : $('#upload-img-student')[0].files
+            };
+
+            if (selectors.id != 0 &&
+                selectors.list.length != 0 &&
+                selectors.name != '' &&
+                selectors.email != '' &&
+                selectors.phone != ''){
+
+                form.append('id', selectors.id);
+                form.append('name', selectors.name);
+                form.append('img', selectors.img[0]);
+                form.append('email', selectors.email);
+                form.append('phone', selectors.phone);
+
+                for (var i = 0; i < selectors.list.length; i++){
+                    // the id will ALWAYS be at the end after '-'
+                    var course_id = selectors.list[i].id.split('-').pop();
+                    listOfIds.push(parseInt(course_id));
+                }
+
+                form.append('courses', listOfIds);
+            }
+        }
+        else if(type === "course"){
+            selectors = {
+                type             : type,
+                list             : $('#list-of-students-to-add').children().filter('.active'),
+                //id               : parseInt($('#course-info-inputs').find('span:hidden').val()),
+                id               : $('#db-course-id').text(),
+                name             : $('#new-course-name').val(),
+                description      : $('#new-course-desc').val(),
+                img              : $('#upload-img-course')[0].files
+            };
+
+            if (selectors.id != 0 &&
+                selectors.list.length != 0 &&
+                selectors.name != '' &&
+                selectors.description != ''){
+
+                    form.append('id', selectors.id);
+                    form.append('name', selectors.name);
+                    form.append('img', selectors.img[0]);
+                    form.append('description', selectors.description);
+
+                    for (var i = 0; i < selectors.list.length; i++){
+                        // the id will ALWAYS be at the end after '-'
+                        var student_id = selectors.list[i].id.split('-').pop();
+                        listOfIds.push(parseInt(student_id));
+                    }
+
+                    form.append('students', listOfIds);
+            }
+        }
+
+        return form;
+    }
+
 
     window.findCourseByID           = findCourseByID;
     window.findStudentByID          = findStudentByID;
     window.addCourseToStudent       = addCourseToStudent;
     window.processStudentData       = processStudentData;
+    window.processCourseData        = processCourseData;
     window.processStudentImage      = processStudentImage;
 
 

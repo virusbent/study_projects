@@ -18,14 +18,16 @@
             </div>
             <form class="form-signin" id="course-info-inputs">
                 <h2 class="form-signin-heading text-center">Add Course</h2>
+                <div>
+                    <img id="add-course-img" src="http://placehold.it/250x250" alt="placeholdit">
+                </div>
                 <br>
-                <span hidden></span>
+                <span id="db-course-id" hidden></span>
                 <input type="text" id="new-course-name" class="form-control" placeholder="Course Name" required autofocus>
                 <input type="text" id="new-course-desc" class="form-control" placeholder="Description" required>
+                <input type="file" name="course_img" class="btn" id="upload-img-course">
+                <button class="btn btn-success" onclick="processCourseData(event)">Save the Course</button>
                 <br>
-                <div>
-                    <img id="course-img" src="http://placehold.it/250x250" alt="placeholdit">
-                </div>
                 <br>
                 <div class="row">
                     <div id="course-students" class="input-group col-lg-4 col-lg-offset-1">

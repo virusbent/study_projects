@@ -36,4 +36,10 @@ interface ICourses_StudentsDAO
      * @param array $students
      */
     public function saveStudentsOfCourse($courses_id, $students);
+
+    /**
+     * @param       $student_id
+     * @param array $course_ids
+     */
+    public function deleteCoursesOfStudent($student_id, array $course_ids);
 }
