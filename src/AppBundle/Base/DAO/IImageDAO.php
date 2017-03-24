@@ -25,6 +25,7 @@ interface IImageDAO
 
     /**
      * @param int $id
+     * @return $delete
      */
     public function delete($id);
 

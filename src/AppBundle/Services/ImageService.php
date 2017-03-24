@@ -60,9 +60,10 @@ class ImageService implements IImageService
 
     /**
      * @param int $id
+     * @return $delete
      */
     public function deleteImage($id)
     {
-        $this->imgDAO->delete($id);
+        return $this->imgDAO->delete($id);
     }
 }

@@ -53,6 +53,7 @@ class ImageDAO implements IImageDAO
 
     /**
      * @param int $id
+     * @return $delete
      */
     public function delete($id)
     {
@@ -60,6 +61,7 @@ class ImageDAO implements IImageDAO
         $delete->from(self::TABLE)
                 ->byField('i_ID', $id)
                 ->execute();
+        return $delete;
     }
 
     /**

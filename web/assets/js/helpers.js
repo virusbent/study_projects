@@ -206,6 +206,26 @@ $(document).ready(function () {
         return form;
     }
 
+    function deleteStudent() {
+        var student_id = $("#db-student-id").text();
+
+        if(student_id == false){
+            console.log("Cleared!");
+            emptyDetails("student");
+        }
+        else{
+            console.log("id to delete -> ", student_id);
+            var deleteData = {
+                type : "student",
+                id   : student_id
+            };
+
+            var isStudentDeleted = deleteFromServer(deleteData);
+            if(isStudentDeleted)
+                updateStudentList();
+        }
+    }
+
 
     window.findCourseByID           = findCourseByID;
     window.findStudentByID          = findStudentByID;
@@ -213,6 +233,7 @@ $(document).ready(function () {
     window.processStudentData       = processStudentData;
     window.processCourseData        = processCourseData;
     window.processStudentImage      = processStudentImage;
+    window.deleteStudent            = deleteStudent;
 
 
 });

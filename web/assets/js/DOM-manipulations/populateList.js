@@ -84,7 +84,22 @@
         })
     }
 
+    function updateStudentList() {
+        var studentList = $("#student-list");
+
+        getAllStudents().then(function (students) {
+            console.log("updating student list with new list: \n\r", students);
+
+            // updating student list
+            allStudents = students;
+            studentList.empty();
+            populateStudentList(students);
+            mainViewCtrl("add-student", null);
+        })
+    }
+
 
     window.populateCourseList = populateCourseList;
     window.populateStudentList= populateStudentList;
+    window.updateStudentList  = updateStudentList;
 })();

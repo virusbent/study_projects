@@ -284,9 +284,6 @@
     }
 
 
-
-    /* INNER METHODS */
-
     function emptyDetails(type) {
         if(type === "student"){
             $('#db-student-id').text("");
@@ -319,15 +316,17 @@
                 $('#new-student-email').val(details.s_email);
                 $('#add-student-img').attr('src', details.s_img[1]);
                 var courseListNotActive = $("#list-of-courses-to-add").children();
-                details.s_courses.map(function (course) {
-                    courseListNotActive.each(function () {
-                        var courseNotActive = $(this);
-                        if(course.c_name === courseNotActive.text()){
-                            // selecting current courses of student
-                            courseNotActive.addClass('active');
-                        }
-                    })
-                });
+                if(details.s_courses){
+                    details.s_courses.map(function (course) {
+                        courseListNotActive.each(function () {
+                            var courseNotActive = $(this);
+                            if(course.c_name === courseNotActive.text()){
+                                // selecting current courses of student
+                                courseNotActive.addClass('active');
+                            }
+                        })
+                    });
+                }
                 break;
             case PREFIX.course  :
                 $('#course-info-inputs').find('span:hidden').val(details.c_ID);
@@ -357,6 +356,7 @@
 
 
     window.mainViewCtrl             = mainViewCtrl;
+    window.emptyDetails             = emptyDetails;
     window.editThisStudent          = editThisStudent;
     window.editThisCourse           = editThisCourse;
     window.showStudentDetails       = showStudentDetails;

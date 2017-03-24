@@ -83,7 +83,7 @@ class StudentService implements IStudentService
      */
     public function deleteStudent($id)
     {
-        $this->studentDAO->delete($id);
+        return $this->studentDAO->delete($id);
     }
 
     /**
@@ -128,5 +128,10 @@ class StudentService implements IStudentService
             $this->coursesOfStudentDAO->deleteCoursesOfStudent($id, $coursesToDelete);
         if($coursesToSave)
             $this->coursesOfStudentDAO->saveCoursesOfStudent($id, $coursesToSave);
+    }
+
+    public function deleteStudentCourses($id, $courses){
+        return $this->coursesOfStudentDAO->deleteCoursesOfStudent($id, $courses);
+
     }
 }

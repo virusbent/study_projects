@@ -58,7 +58,7 @@ class StudentDAO implements IStudentDAO
      */
     public function delete($id)
     {
-        $this->connector->delete($id);
+        return $this->connector->delete($id);
     }
 
     /**

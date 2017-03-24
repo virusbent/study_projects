@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Base\DAO\ICourses_StudentsDAO;
 use AppBundle\Base\DAO\IStudentDAO;
 use AppBundle\Objects\Course;
 use AppBundle\Objects\Student;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use \AppBundle\Base\DAO\IStudentService;
 use AppBundle\Base\DAO\ICourseService;
 use AppBundle\Base\DAO\IImageService;
+use AppBundle\DAO\Courses_StudentsDAO;
 
 use Aws\S3\S3Client;
 
@@ -34,6 +36,7 @@ class StudentsController extends Controller
         $this->studentsService  = Scope::skeleton()->get(IStudentService::class);
         $this->coursesService   = Scope::skeleton()->get(ICourseService::class);
         $this->imgsService      = Scope::skeleton()->get(IImageService::class);
+        $this->courses_students = Scope::skeleton()->get(ICourses_StudentsDAO::class);
     }
 
     /**
@@ -171,6 +174,46 @@ class StudentsController extends Controller
         $response->setContent($student_id);
         $response->setStatusCode(Response::HTTP_OK);
         return $response;
+    }
+
+    /**
+     * @Route("/deleteStudent/", name="deleteStudent")
+     */
+    public function deleteStudent(Request $request){
+        // delete action completion flag
+        $done           = false;
+
+        $student_id     = $request->getContent();
+        $student        = $this->studentsService->getStudentByID($student_id);
+
+        // delete student
+        $isDeleted      = $this->studentsService->deleteStudent($student_id);
+
+        // after student has been deleted, delete his images and courses
+        if($isDeleted){
+
+            $studentCourses = $this->studentsService->getStudentCourses($student_id);
+
+            // delete student image if there is one
+            if (isset($student->s_img)){
+                $isImgDeleted = $this->imgsService->deleteImage($student->s_img);
+            }
+            else{
+                $isImgDeleted = true;
+            }
+
+            // delete student's courses, if there are exist
+            if(count($studentCourses) > 0){
+                $isCoursesDeleted = $this->courses_students->deleteCoursesOfStudent($student_id, $studentCourses);
+            }
+            else{
+                $isCoursesDeleted = true;
+            }
+
+            $done = $isDeleted and $isImgDeleted and $isCoursesDeleted;
+        }
+
+        return new JsonResponse($done);
     }
 
 
