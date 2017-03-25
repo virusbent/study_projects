@@ -106,9 +106,19 @@ class CourseService implements ICourseService
 
     /**
      * @param int $id
+     * @return bool
      */
     public function delete($id)
     {
-        $this->courseDAO->delete($id);
+        return $this->courseDAO->delete($id);
+    }
+
+    /**
+     * @param $id
+     * @param $students
+     */
+    public function deleteCourseStudents($id, $students)
+    {
+        return $this->studentsOfCourseDAO->deleteCoursesOfStudent($id, $students);
     }
 }

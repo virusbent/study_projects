@@ -41,6 +41,7 @@ interface ICourseDAO
 
     /**
      * @param int $id
+     * @return bool
      */
     public function delete($id);
 }

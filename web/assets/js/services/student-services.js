@@ -95,7 +95,7 @@
             payload = data.id;
         }
         else if(data.type === "course"){
-            url     = "/deletecourse/";
+            url     = "/deleteCourse/";
             payload = data.id;
         }
 

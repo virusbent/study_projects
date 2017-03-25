@@ -20,6 +20,15 @@ $(document).ready(function () {
 
     // *** EVENTS ***************
 
+    // counting the amount of students and courses, auto updating
+    $("#course-list").change(function () {
+        console.log(allCourses.length);
+        $("#course-count").text(allCourses.length);
+    });
+    $("#student-list").change(function () {
+        $("#student-count").text(allStudents.length);
+    });
+
     $("#add-student").on("click", function (event) {
         $("#count").hide();
         mainViewCtrl(event.target.id, null);

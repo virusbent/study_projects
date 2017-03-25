@@ -98,8 +98,23 @@
         })
     }
 
+    function updateCourseList() {
+        var courseList = $("#course-list");
+
+        getAllCourses().then(function (courses) {
+            console.log("updating course list with new list: \n\r", courses);
+
+            // updating course list
+            allCourses = courses;
+            courseList.empty();
+            populateCourseList(courses);
+            mainViewCtrl("add-course", null);
+        })
+    }
+
 
     window.populateCourseList = populateCourseList;
     window.populateStudentList= populateStudentList;
     window.updateStudentList  = updateStudentList;
+    window.updateCourseList   = updateCourseList;
 })();

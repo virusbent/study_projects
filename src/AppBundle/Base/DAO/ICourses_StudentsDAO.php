@@ -42,4 +42,11 @@ interface ICourses_StudentsDAO
      * @param array $course_ids
      */
     public function deleteCoursesOfStudent($student_id, array $course_ids);
+
+    /**
+     * @param       $course_id
+     * @param array $student_ids
+     * @return bool
+     */
+    public function deleteStudentsOfCourse($course_id, array $student_ids);
 }

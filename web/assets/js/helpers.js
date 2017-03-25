@@ -226,6 +226,26 @@ $(document).ready(function () {
         }
     }
 
+    function deleteCourse() {
+        var course_id = $("#db-course-id").text();
+
+        if(course_id == false){
+            console.log("Cleared!");
+            emptyDetails("course");
+        }
+        else{
+            console.log("id to delete -> ", course_id);
+            var deleteData = {
+                type : "course",
+                id   : course_id
+            };
+
+            var isCourseDeleted = deleteFromServer(deleteData);
+            if(isCourseDeleted)
+                updateCourseList();
+        }
+    }
+
 
     window.findCourseByID           = findCourseByID;
     window.findStudentByID          = findStudentByID;
@@ -234,6 +254,7 @@ $(document).ready(function () {
     window.processCourseData        = processCourseData;
     window.processStudentImage      = processStudentImage;
     window.deleteStudent            = deleteStudent;
+    window.deleteCourse             = deleteCourse;
 
 
 });

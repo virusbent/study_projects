@@ -56,10 +56,11 @@ class CourseDAO implements ICourseDAO
 
     /**
      * @param int $id
+     * @return bool
      */
     public function delete($id)
     {
-        $this->connector->delete($id);
+        return $this->connector->delete($id);
     }
 
     /**

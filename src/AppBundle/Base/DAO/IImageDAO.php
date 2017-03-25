@@ -12,6 +12,11 @@ namespace AppBundle\Base\DAO;
 interface IImageDAO
 {
     /**
+     * @return array $allImages
+     */
+    public function loadAll();
+
+    /**
      * @param int $id
      * @return string|null
      */

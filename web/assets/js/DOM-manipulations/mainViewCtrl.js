@@ -278,6 +278,7 @@
     }
 
     function editThisCourse() {
+        var id = $("#db-course-id");
         findCourseByID(id.text(), function (course) {
             mainViewCtrl('add-course', course);
         });
@@ -329,7 +330,7 @@
                 }
                 break;
             case PREFIX.course  :
-                $('#course-info-inputs').find('span:hidden').val(details.c_ID);
+                $('#course-info-inputs').find('span:hidden').text(details.c_ID);
                 $('#new-course-name').val(details.c_name);
                 $('#new-course-desc').val(details.c_description);
                 $('#add-course-img').attr("src", details.c_img[1]);

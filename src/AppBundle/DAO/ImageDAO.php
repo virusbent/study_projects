@@ -78,4 +78,15 @@ class ImageDAO implements IImageDAO
                 ->set('i_thumb', $thumbPath)
                 ->execute();
     }
+
+    /**
+     * @return array $allImages
+     */
+    public function loadAll()
+    {
+        $select = $this->connector->select();
+        $select->column()->from(self::TABLE);
+        $result = $select->queryAll();
+        return $result;
+    }
 }

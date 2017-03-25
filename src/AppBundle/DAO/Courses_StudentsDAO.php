@@ -91,4 +91,18 @@ class Courses_StudentsDAO implements ICourses_StudentsDAO
                     ->byField("cs_course_ID", $course_ids)
                     ->executeDml();
     }
+
+    /**
+     * @param       $course_id
+     * @param array $student_ids
+     * @return bool
+     */
+    public function deleteStudentsOfCourse($course_id, array $student_ids)
+    {
+        return $this->connector->delete()
+            ->from(self::TABLE)
+            ->byField("cs_course_ID", $course_id)
+            ->byField("cs_student_ID", $student_ids)
+            ->executeDml();
+    }
 }

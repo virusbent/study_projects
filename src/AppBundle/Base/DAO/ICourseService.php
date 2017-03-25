@@ -39,4 +39,27 @@ interface ICourseService
      * @param int $id
      */
     public function delete($id);
+
+    /**
+     * @return array|null
+     */
+    public function getAllCourses();
+
+    /**
+     * @param $id
+     * @param $newStudents
+     */
+    public function updateCourseStudents($id, $newStudents);
+
+    /**
+     * @param $id
+     * @param $students
+     */
+    public function deleteCourseStudents($id, $students);
+
+    /**
+     * @param $id
+     * @param $students
+     */
+    public function saveCourseStudents($id, $students);
 }

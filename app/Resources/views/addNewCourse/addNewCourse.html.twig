@@ -8,8 +8,8 @@
                     </button>
                 </div>
                 <div class="col-lg-6 btn-right">
-                    <button class="btn btn-success" id="edit-btn" type="submit">
-                        <i class="fa fa-pencil fa-2x" aria-hidden="true"></i>
+                    <button class="btn btn-danger" id="delete-btn" type="submit" onclick="deleteCourse()">
+                        <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
                     </button>
                     <button class="btn" id="close-btn" type="submit">
                         <i class="fa fa-times fa-2x" aria-hidden="true"></i>
@@ -22,7 +22,7 @@
                     <img id="add-course-img" src="http://placehold.it/250x250" alt="placeholdit">
                 </div>
                 <br>
-                <span id="db-course-id" hidden></span>
+                <span id="db-course-id" value="" hidden></span>
                 <input type="text" id="new-course-name" class="form-control" placeholder="Course Name" required autofocus>
                 <input type="text" id="new-course-desc" class="form-control" placeholder="Description" required>
                 <input type="file" name="course_img" class="btn" id="upload-img-course">
