@@ -14,16 +14,22 @@ use AppBundle\Objects\Admin;
 interface IAdminService
 {
     /**
+     * Returns the total amount of Administrators.
+     * @return int|null
+     */
+    public function countAllAdmins();
+
+    /**
      * @param int $id
      * @return Admin|null
      */
     public function getAdminByID($id);
 
     /**
-     * @param int $id
+     * @param integer $role_id
      * @return string|null
      */
-    public function getAdminRole($id);
+    public function getAdminRole($role_id);
 
     /**
      * @param Admin $admin
@@ -34,6 +40,12 @@ interface IAdminService
      * @param Admin $admin
      */
     public function update(Admin $admin);
+
+    /**
+     * @param string $role
+     * @return boolean
+     */
+    public function updateRole($role);
 
     /**
      * @param int $id

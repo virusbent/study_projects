@@ -22,6 +22,11 @@ interface IAdminDAO
     public function load($id);
 
     /**
+     * @return array|null
+     */
+    public function loadAll();
+
+    /**
      * @param Admin $admin
      */
     public function save(Admin $admin);
@@ -37,9 +42,21 @@ interface IAdminDAO
     public function delete($id);
 
     /**
-     * @param int $id
+     * @return integer $adminCount
+     */
+    public function count();
+
+    /**
+     * @param int $role_id
      *
      * @return string|null
      */
-    public function getRole($id);
+    public function getRole($role_id);
+
+    /**
+     * @param integer $target_id
+     * @param string $role
+     * @return boolean
+     */
+    public function updateRole($target_id, $role);
 }

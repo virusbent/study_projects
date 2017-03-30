@@ -84,6 +84,35 @@
         })
     }
 
+    function populateAdminList(admins) {
+        var adminList = $("#admin-list");
+        console.log('populateAdminList --------> ', admins);
+        $.each(admins, function (i) {
+            var adminUnit = $('<li/>')
+                .attr('id', admins[i].a_ID)
+                .addClass('list-group-item')
+                .appendTo(adminList)
+                .on('click', function (event) {
+                    // show admin details on the main view.
+                    mainViewCtrl('show-admin', admins[i]);
+                });
+
+            var row = $('<div/>')
+                .addClass('row')
+                .appendTo(adminUnit);
+
+            var name = $('<div/>')
+                .text(admins[i].a_name)
+                .addClass('col-lg-8 block-center')
+                .appendTo(row);
+
+            var phone = $('<div/>')
+                .text(admins[i].a_phone)
+                .addClass('col-lg-8 block-center')
+                .appendTo(row);
+        })
+    }
+
     function updateStudentList() {
         var studentList = $("#student-list");
 
@@ -112,9 +141,25 @@
         })
     }
 
+    function updateAdminList() {
+        var adminList = $("#admin-list");
+
+        getAllAdmins().then(function (admins) {
+            console.log("updating admin list with new list: \n\r", admins);
+
+            // updating admin list
+            allAdmins = admins;
+            adminList.empty();
+            populateAdminList(admins);
+            mainViewCtrl("add-admin", null);
+        })
+    }
+
 
     window.populateCourseList = populateCourseList;
     window.populateStudentList= populateStudentList;
+    window.populateAdminList  = populateAdminList;
     window.updateStudentList  = updateStudentList;
     window.updateCourseList   = updateCourseList;
+    window.updateAdminList    = updateAdminList;
 })();

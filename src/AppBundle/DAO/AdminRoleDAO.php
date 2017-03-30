@@ -31,10 +31,10 @@ class AdminRoleDAO implements IAdminRoleDAO
         //TODO: fix this. the query is probably wrong.
         $select = $this->connector->select();
         $select->column()
+                ->select('r_name')
                 ->from(self::TABLE)
                 ->byField('r_ID', $id);
-        $response = $select->queryRow();
-        $role     = $response[1];
-        return $role;
+        $response = $select->execute();
+        return $response;
     }
 }

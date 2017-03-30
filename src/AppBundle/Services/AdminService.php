@@ -24,11 +24,6 @@ class AdminService implements IAdminService
      */
     private $adminDAO;
 
-    /**
-     * @autoload
-     * @var \AppBundle\Base\DAO\IAdminRoleDAO
-     */
-    private $roleDAO;
 
     /**
      * @param int $id
@@ -40,13 +35,12 @@ class AdminService implements IAdminService
     }
 
     /**
-     * @param int $id
+     * @param int $role_id
      * @return string|null
      */
-    public function getAdminRole($id)
+    public function getAdminRole($role_id)
     {
-        $role_id = $this->getAdminByID($id)->a_role;
-        return $this->roleDAO->getRole($role_id);
+        return $this->adminDAO->getRole($role_id);
     }
 
     /**
@@ -71,5 +65,24 @@ class AdminService implements IAdminService
     public function delete($id)
     {
         $this->adminDAO->delete($id);
+    }
+
+    /**
+     * Returns the total amount of Administrators.
+     * @return int|null
+     */
+    public function countAllAdmins()
+    {
+        return $this->adminDAO->count();
+    }
+
+    /**
+     * Only "owner" can update Roles
+     * @param string $role
+     * @return boolean
+     */
+    public function updateRole($role)
+    {
+        //TODO: find a way to implement this function in a right way.
     }
 }

@@ -98,6 +98,11 @@
             url     = "/deleteCourse/";
             payload = data.id;
         }
+        else if(data.type === "admin"){
+            url     = "/deleteAdmin/";
+            payload = data.id;
+        }
+
 
         return $.ajax({
             method  : 'POST',
