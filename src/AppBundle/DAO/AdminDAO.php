@@ -1,40 +1,34 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: evgeniy
- * Date: 06/12/16
- * Time: 21:01
- */
-
 namespace AppBundle\DAO;
+
 
 use AppBundle\Base\DAO\IAdminDAO;
 use AppBundle\Objects\Admin;
 use AppBundle\Scope;
 use Squid\MySql\Impl\Connectors\MySqlAutoIncrementConnector;
-use Symfony\Component\Security\Core\Role\Role;
+
 
 class AdminDAO implements IAdminDAO
 {
     const TABLE   = 'admins';
     const ROLES   = 'roles';
 
-    /**
-     * @var MySqlAutoIncrementConnector
-     */
+    /** @var MySqlAutoIncrementConnector */
     private $connector;
 
+    /** @var \Squid\MySql|\Squid\MySql\IMySqlConnector */
     private $mysql;
+
 
     public function __construct()
     {
         $this->mysql     = Scope::connector();
         $this->connector = new MySqlAutoIncrementConnector();
         $this->connector
-                ->setConnector(Scope::connector())
-                ->setTable(self::TABLE)
-                ->setDomain(Admin::class)
-                ->setIdField('a_ID');
+            ->setConnector(Scope::connector())
+            ->setTable(self::TABLE)
+            ->setDomain(Admin::class)
+            ->setIdField('a_ID');
     }
 
     /**
@@ -49,11 +43,11 @@ class AdminDAO implements IAdminDAO
 
     /**
      * @param Admin $admin
-     *
+     * @return boolean
      */
     public function save(Admin $admin)
     {
-        $this->connector->save($admin);
+        return $this->connector->save($admin);
     }
 
 
@@ -67,14 +61,13 @@ class AdminDAO implements IAdminDAO
 
     public function getRole($id)
     {
-        //TODO: fix this. the query is probably wrong.
-        $select = $this->connector->select();
-        $select->column()
-            ->select('r_name')
+        $role = $this->mysql->select();
+
+        return $role
             ->from(self::ROLES)
-            ->byField('r_ID', $id);
-        $response = $select->execute();
-        return $response;
+            ->column('r_name')
+            ->byField('r_ID', $id)
+            ->queryScalar();
     }
 
     /**
@@ -100,11 +93,8 @@ class AdminDAO implements IAdminDAO
     public function count()
     {
         $select = $this->mysql->select();
-        $select->column('a_ID')
-            ->from(self::TABLE);
-
-        $result = $select->queryCount();
-        return $result;
+        $select->from(self::TABLE);
+        return $select->queryCount();
     }
 
     /**

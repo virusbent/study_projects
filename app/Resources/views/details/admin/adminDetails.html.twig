@@ -5,29 +5,29 @@
             <div class="col-lg-12" id="profile">
                 <div class="panel panel-default container-fluid">
                     <div class="panel-heading row">
+                        <button class="btn btn-default btn-xs pull-left"
+                                id="quick-close"
+                                onclick="closeView('details')">Close
+                        </button>
                         <button class="btn btn-default btn-xs pull-right"
                                 id="quick-edit"
-                                onclick="editThisAdmin()">Edit</button>
+                                onclick="editAdmin()">Edit
+                        </button>
                         <h3 id="admin-name"></h3>
                         <span hidden></span>
                     </div>
                     <div class="panel-body">
-                        <div class="col-lg-6" id="admin-id"></div>
+                        <div class="col-lg-6" val="" id="admin-id" hidden></div>
                         <div class="col-lg-8" id="admin-phone"></div>
                         <div class="col-lg-8" id="admin-email"></div>
-                        <select class="col-lg-8" id="admin-role">
-                            <option id="role-owner" value="">Owner</option>
-                            <option id="role-manager" value="">Manager</option>
-                            <option id="role-sales" value="">Sales</option>
+                        <select class="col-lg-8" id="admin-role" disabled>
+                            <option id="0" value="role-none">No Role</option>
+                            <option id="1" value="role-owner">Owner</option>
+                            <option id="2" value="role-manager">Manager</option>
+                            <option id="3" value="role-sales">Sales</option>
                         </select>
                     </div>
-
                 </div>
-            </div>
-            <div class="col-lg-6 panel panel-default">
-                <h2 class="list-group-item-heading">Students</h2>
-                <ul class="list-group" id="this-course-students">
-                </ul>
             </div>
         </div>
     </div>

@@ -1,4 +1,8 @@
 <?php
+session_start();
+
+SessionModule::instance()->login();
+
 
 use Symfony\Component\HttpFoundation\Request;
 

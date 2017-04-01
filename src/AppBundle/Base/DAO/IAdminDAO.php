@@ -28,6 +28,7 @@ interface IAdminDAO
 
     /**
      * @param Admin $admin
+     * @return boolean
      */
     public function save(Admin $admin);
 

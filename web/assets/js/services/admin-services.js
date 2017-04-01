@@ -14,7 +14,7 @@
                     Promise.each(response, function (admin) {
                         return getAdminRole(admin.a_role)
                             .then(function (role) {
-                                admin.a_role   = role[0].r_name;
+                                admin.a_role   = role;
                             });
                     })
                         .then(function (modifiedAdmins) {
@@ -47,18 +47,38 @@
         });
     }
 
-    function handleAdminToServer(admin){
-        console.log('admin -> ', admin);
-        console.log('Service - handleAdminToServer: ', admin);
+    function createAdmin(admin){
+        console.log('creating admin -> ', admin);
         return $.ajax({
-            method      : 'POST',
-            url         : '/saveAdmin/',
-            contentType : false,
-            data        : admin,
-            processData : false
+            type      : 'POST',
+            url         : '/createAdmin',
+            /*contentType : 'application/x-www-form-urlencoded',*/
+            data        : admin
+            /*processData : false*/
         })
             .then(function (response) {
-                console.log('*handleAdminToServer* - Promise response: ', response);
+                console.log('*createAdmin* - Promise response: ', response);
+                if(response != false)
+                    return response;
+                else if(response == "password_missmatch")
+                    alert("Re-Type the Passwords!");
+                else
+                    throw new Error(response);
+            })
+            .catch(function (err) {
+                throw new Error(err);
+            });
+    }
+
+    function updateAdmin(admin){
+        console.log('updating admin -> ', admin);
+        return $.ajax({
+            type      : 'POST',
+            url         : '/updateAdmin',
+            data        : admin
+        })
+            .then(function (response) {
+                console.log('*updateAdmin* - Promise response: ', response);
                 if(response != false)
                     return response;
                 else
@@ -70,8 +90,9 @@
     }
 
 
-    window.getAllAdmins         = getAllAdmins;
-    window.getAdminRole         = getAdminRole;
-    window.handleAdminToServer  = handleAdminToServer;
+    window.getAllAdmins = getAllAdmins;
+    window.getAdminRole = getAdminRole;
+    window.createAdmin  = createAdmin;
+    window.updateAdmin  = updateAdmin;
 
 })();

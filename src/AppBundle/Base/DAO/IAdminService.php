@@ -14,6 +14,11 @@ use AppBundle\Objects\Admin;
 interface IAdminService
 {
     /**
+     * @return array|null
+     */
+    public function getAllAdmins();
+
+    /**
      * Returns the total amount of Administrators.
      * @return int|null
      */
@@ -33,6 +38,7 @@ interface IAdminService
 
     /**
      * @param Admin $admin
+     * @return boolean
      */
     public function save(Admin $admin);
 

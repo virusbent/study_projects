@@ -94,22 +94,26 @@
                 .appendTo(adminList)
                 .on('click', function (event) {
                     // show admin details on the main view.
-                    mainViewCtrl('show-admin', admins[i]);
+                    showAdminDetails(admins[i].a_ID);
                 });
 
             var row = $('<div/>')
                 .addClass('row')
                 .appendTo(adminUnit);
 
-            var name = $('<div/>')
-                .text(admins[i].a_name)
-                .addClass('col-lg-8 block-center')
+            var div = $('<div/>')
+                .addClass('col-lg-12 col-md-12 col-sm-12')
                 .appendTo(row);
 
-            var phone = $('<div/>')
-                .text(admins[i].a_phone)
-                .addClass('col-lg-8 block-center')
-                .appendTo(row);
+            var name = $('<div/>')
+                .text(admins[i].a_name)
+                .addClass('col-lg-10 col-md-10 col-sm-10 text-left')
+                .appendTo(div);
+
+            var role = $('<div/>')
+                .text(admins[i].a_role)
+                .addClass('col-lg-10 col-md-10 col-sm-10 text-left')
+                .appendTo(div);
         })
     }
 
@@ -151,7 +155,7 @@
             allAdmins = admins;
             adminList.empty();
             populateAdminList(admins);
-            mainViewCtrl("add-admin", null);
+            closeView('reset');
         })
     }
 

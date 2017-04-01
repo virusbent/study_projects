@@ -3,7 +3,7 @@
         <div class="col-lg-12">
             <div class="row" id="buttons">
                 <div class="col-lg-6 btn-left">
-                    <button class="btn btn-success" id="save-btn" type="submit" onclick="processAdminData()">
+                    <button class="btn btn-success" id="save-btn" type="submit" onclick="processAdminData(event)">
                         <i class="fa fa-floppy-o fa-2x" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -11,7 +11,7 @@
                     <button class="btn btn-danger" id="delete-btn" type="submit" onclick="deleteAdmin()">
                         <i class="fa fa-trash-o fa-2x" aria-hidden="true"></i>
                     </button>
-                    <button class="btn" id="close-btn" type="submit">
+                    <button class="btn" id="close-btn" type="submit" onclick="closeView('new')">
                         <i class="fa fa-times fa-2x" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -23,14 +23,16 @@
                     <div class="input-group col-lg-6" id="admin-info-inputs">
                         <span id="db-admin-id" value="" hidden></span>
                         <input type="text" id="new-admin-name" class="form-control" value="" placeholder="Name" autofocus>
-                        <input type="text" id="new-admin-phone" class="form-control" value="" placeholder="Phone" >
-                        <input type="email" id="new-admin-role" class="form-control" value="" placeholder="eMail" >
+                        <input type="tel" id="new-admin-phone" class="form-control" value="" placeholder="Phone" >
+                        <input type="email" id="new-admin-email" class="form-control" value="" placeholder="eMail" >
+                        <input type="password" id="new-admin-pass" class="form-control" value="" placeholder="Password" >
+                        <input type="password" id="new-admin-pass-confirm" class="form-control" value="" placeholder="Confirm Password" >
                         <select id="new-admin-role" class="form-control">
-                            <option id="role-owner" value="">Owner</option>
-                            <option id="role-manager" value="">Manager</option>
-                            <option id="role-sales" value="">Sales</option>
+                            <option id="0" value="role-none">Choose Role</option>
+                            <option id="1" value="role-owner">Owner</option>
+                            <option id="2" value="role-manager">Manager</option>
+                            <option id="3" value="role-sales">Sales</option>
                         </select>
-                        <button class="btn btn-success" onclick="processAdminData(event)">Save Administrator</button>
                     </div>
                     <br>
                 </div>

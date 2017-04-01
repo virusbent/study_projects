@@ -118,6 +118,25 @@ $(document).ready(function () {
         }
     }
 
+    function processAdminData(event) {
+        event.preventDefault();
+
+        var newAdmin = {
+            id          : $('#db-admin-id').text(),
+            name        : $('#new-admin-name').val(),
+            email       : $('#new-admin-email').val(),
+            old_pass    : $('#new-admin-pass').val(),
+            new_pass    : $('#new-admin-pass-confirm').val(),
+            phone       : $('#new-admin-phone').val(),
+            role        : $("#new-admin-role").children(":selected").attr("id")
+        };
+
+        if(newAdmin.id)
+            updateAdmin(newAdmin);
+        else
+            createAdmin(newAdmin);
+    }
+
     // TODO: a variable that returns from the helper function is undefined, fix that (?)
     function addCourseToStudent(student_id) {
         console.log('Add course to student with ID: ', student_id, ' (type: ', typeof student_id, ')');
@@ -247,14 +266,40 @@ $(document).ready(function () {
     }
 
 
+    function isOwner(admin) {
+        if (admin == 1)
+            return true;
+        else
+            return false;
+    }
+
+    function isManager(admin) {
+        if(admin == 2)
+            return true;
+        else
+            return false;
+    }
+
+    function hasRole(user) {
+        if(user.a_role)
+            return true;
+        else
+            return false;
+    }
+
+
     window.findCourseByID           = findCourseByID;
     window.findStudentByID          = findStudentByID;
     window.addCourseToStudent       = addCourseToStudent;
     window.processStudentData       = processStudentData;
     window.processCourseData        = processCourseData;
     window.processStudentImage      = processStudentImage;
+    window.processAdminData         = processAdminData;
     window.deleteStudent            = deleteStudent;
     window.deleteCourse             = deleteCourse;
+    window.isOwner                  = isOwner;
+    window.isManager                = isManager;
+    window.hasRole                  = hasRole;
 
 
 });

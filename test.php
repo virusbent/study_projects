@@ -397,12 +397,12 @@ $studentsCoursesArrJson = '[{
   "cs_student_ID": 13
 }]';
 
-$studentsArr = json_decode($studentsArrJson);
+/*$studentsArr = json_decode($studentsArrJson);
 $imagesArr   = json_decode($imagesArrJson);
 $studentsCoursesArr = json_decode($studentsCoursesArrJson);
 $studentsAndCourses = parseStudentsCourses($studentsCoursesArr);
 
-$save   = $connector->insert();
+$save   = $connector->insert();*/
 
 /*foreach ($studentsAndCourses as $course_student){
     $row = array($course_student->cs_course_ID, $course_student->cs_student_ID);
@@ -418,11 +418,11 @@ $save   = $connector->insert();
 }*/
 
 // read old images from file and prepare array of edited images
-$open_file = fopen("old_images_db.txt", 'r') or die("Unable to open file!");
+/*$open_file = fopen("old_images_db.txt", 'r') or die("Unable to open file!");
 $oldImagesJson = fread($open_file, filesize("old_images_db.txt"));
 fclose($open_file);
 $oldImagesfromJson = json_decode($oldImagesJson);
-$editedImages = parseOldImages($oldImagesfromJson);
+$editedImages = parseOldImages($oldImagesfromJson);*/
 
 // save old images back to server
 /*foreach ($editedImages as $img){
@@ -430,3 +430,73 @@ $editedImages = parseOldImages($oldImagesfromJson);
     $save = $imgDAO->save($img['i_path'], $img['i_thumb']);
     echo "*************** SAVED ****************\n\r" . $save;
 }*/
+
+
+$password = "123456";
+$hashed = password_hash($password, PASSWORD_BCRYPT);
+
+var_dump($hashed);
+
+
+$input = "12345";
+
+
+//var_dump(password_verify($input, $hashed));
+
+
+class SessionModule
+{
+    use \Objection\TSingleton;
+
+
+    private $user = null;
+
+
+    public function isLoggedIn()
+    {
+        return !((bool)$this->user);
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function login()
+    {
+        $s = new \Symfony\Component\HttpFoundation\Session\Session();
+
+        if (!$s->has('user_id'))
+            return false;
+
+        // $this->user = userDAO->load($s->get('user_id'));
+
+        return $this->isLoggedIn();
+    }
+
+    public function logout()
+    {
+        $s = new \Symfony\Component\HttpFoundation\Session\Session();
+        $s->clear();
+
+        $this->user = null;
+    }
+
+    public function authorize($id)
+    {
+        $s = new \Symfony\Component\HttpFoundation\Session\Session();
+
+        $s->set('user_id', $id);
+        $this->login();
+    }
+}
+
+
+
+if (isset($_SESSION['user_id']))
+{
+    $sessionModule->Login($_SESSION['user_id']);
+
+    $sessionModule->getUSer();
+}
+$_SESSION['user_id'] = $user->id;

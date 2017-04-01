@@ -45,10 +45,11 @@ class AdminService implements IAdminService
 
     /**
      * @param Admin $admin
+     * @return boolean
      */
     public function save(Admin $admin)
     {
-        $this->adminDAO->save($admin);
+        return $this->adminDAO->save($admin);
     }
 
     /**
@@ -84,5 +85,13 @@ class AdminService implements IAdminService
     public function updateRole($role)
     {
         //TODO: find a way to implement this function in a right way.
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getAllAdmins()
+    {
+        return $this->adminDAO->loadAll();
     }
 }

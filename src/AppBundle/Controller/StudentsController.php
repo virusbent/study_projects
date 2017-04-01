@@ -78,11 +78,10 @@ class StudentsController extends Controller
     }
 
     /**
-     * @Route("/saveStudent/", name="saveStudent")
+     * @Route("/saveStudent", name="saveStudent")
      */
     public function saveStudent(Request $request)
     {
-        //var_dump($_POST);die;
         $student_id     = $_POST['id'];
         $studentCourses = explode(",", $_POST['courses']);
 

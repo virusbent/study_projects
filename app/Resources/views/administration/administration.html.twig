@@ -6,22 +6,20 @@
         <div class="row">
             <div class="col-lg-12 panel panel-default">
                 <div class="col-lg-6 panel panel-default" id="left-box">
-                    <div class="col-lg-6" id="admins">
-                        <div class="col-lg-12 target-header">
-                            <span class="target-title">Administrators</span>
-                            <i class="fa fa-plus-square-o fa-2x" id="add-admin" aria-hidden="true"></i>
-                        </div>
-                        <div class="col-lg-12">
-                            <ul class="list-group" id="admin-list">
-                                {#--- JS genereated ---#}
-                                {#<li class="list-group-item">
-                                    <div id="admin-profile-thumbnail">
-                                        <div id="admin-name"></div><br>
-                                        <b><div id="admin-role"></div></b>
-                                    </div>
-                                </li>#}
-                            </ul>
-                        </div>
+                    <div class="col-lg-12 target-header">
+                        <span class="target-title">Administrators</span>
+                        <i class="fa fa-plus-square-o fa-2x" id="add-admin" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-lg-12">
+                        <ul class="list-group" id="admin-list">
+                            {#--- JS genereated ---#}
+                            {#<li class="list-group-item">
+                                <div id="admin-profile-thumbnail">
+                                    <div id="admin-name"></div><br>
+                                    <b><div id="admin-role"></div></b>
+                                </div>
+                            </li>#}
+                        </ul>
                     </div>
                 </div>
                 <div class="col-lg-6 panel panel-default text-center" id="main-box">
@@ -52,13 +50,14 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('assets/js/school.js') }}"></script>
-    <script src="{{ asset('assets/js/getFunctions.js') }}"></script>
+    {#<script src="{{ asset('assets/js/school.js') }}"></script>
+    <script src="{{ asset('assets/js/getFunctions.js') }}"></script>#}
     <script src="{{ asset('assets/js/helpers.js') }}"></script>
     <script src="{{ asset('assets/js/globals.js') }}"></script>
+    <script src="{{ asset('assets/js/administration.js') }}"></script>
     <script src="{{ asset('assets/js/DOM-manipulations/populateList.js') }}"></script>
     <script src="{{ asset('assets/js/DOM-manipulations/mainViewCtrl.js') }}"></script>
-    <script src="{{ asset('assets/js/services/student-services.js') }}"></script>
-    <script src="{{ asset('assets/js/services/course-services.js') }}"></script>
+    {#<script src="{{ asset('assets/js/services/student-services.js') }}"></script>
+    <script src="{{ asset('assets/js/services/course-services.js') }}"></script>#}
     <script src="{{ asset('assets/js/services/admin-services.js') }}"></script>
 {% endblock %}
